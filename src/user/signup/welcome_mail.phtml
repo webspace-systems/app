@@ -1,0 +1,66 @@
+<?php if(!isset($CONFIG)) $CONFIG = $GLOBALS['CONFIG']; ?>
+<html>
+<head>
+    <style>
+        html,body{
+          background-color: #629D3C;
+          font-family: sans-serif;
+          width:100%;
+          height:auto;
+          margin:0px;
+          padding:0px;
+        }
+        a{
+            color: rgba(59, 102, 40, 1);
+        }
+        a:hover{
+            color: rgba(145, 158, 138, 1);
+        }
+        .c-container{
+          background-color: white;
+          width:auto;
+          max-width:600px;
+          margin-left:auto;
+          margin-right:auto;
+          padding:14px;
+          padding-right:12px;
+        }
+        .c-inner-container{
+          background-color: white;
+          width:auto;
+          max-width:700px;
+          padding:0px;
+          margin:25px;
+          margin-left:15px;
+          margin-right:15px;
+        }
+    </style>
+</head> 
+
+<body>
+
+<div style="max-width:100%;margin:0px;margin-bottom:5px;padding: 50px 90px;background-color: #629D3C;">
+
+  <div class="c-container">
+
+    <img src="<?=config::get('url');?>/<?=$CONFIG['email_template']['header_image'];?>" style="float:right;height:38px;"></img>
+    
+    <div class="c-inner-container">
+      <p>Hello <?=$Recipient_Name;?></p>
+      <p>Welcome to Back-end.Ninja!<br />Your account has been created, and you're almost ready to login.</p>
+      <p>You just have to confirm your e-mail address, by following this link: <br /><div style="margin:25px;"><a href="<?=$Confirm_Url;?>"><?=$Confirm_Url;?></a></div></p>
+      <p>Following the link will activate your account, afterwards you'll be able to login with your username "<?=$params['username'];?>" and chosen password.</p>
+      <p>
+        I hope that you'll have a pleasent experience with the tools thats provided.
+        <br />
+        However, if not, or if you have any questions or helpful comments, feel free to write me an email at: <a href="mailto:support@<?=$_SERVER['HTTP_HOST'];?>">support@<?=$_SERVER['HTTP_HOST'];?></a>
+      </p>
+      <p><?=$CONFIG['meta']['author'];?><br /><?=$CONFIG['platform_name'];?></p>
+
+    </div>
+  </div>
+  </div>
+  <br style="clear:both" />
+
+</body>
+</html>

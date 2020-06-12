@@ -1,0 +1,141 @@
+
+
+<div id="page-content">
+
+		<div class="content-header">
+			<br class="topMargin" />
+				<div class="header-section">
+						<h1>
+								<i class="fa fa-plus" style="position:relative;top:-8px"></i>New webspace<br><small></small>
+						</h1>
+						<p></p>
+				</div>
+		</div>
+		<ul class="breadcrumb breadcrumb-top">
+				<li><a href="/accounts">Webspaces</a></li>
+				<li class='active'>New webspace</li>
+		</ul>
+
+
+		<div class="row">
+		
+		<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-sm-12 col-sm-offset-0">
+
+				<div class="block">
+		
+					<div class="row">
+
+					<div class="col-md-12">
+
+
+						<h2>
+							<i class="icon-highlight fa fa-cogs"></i>
+							<span>Setup new webspace</span>
+						</h2>
+
+						<p>
+				
+						</p>
+
+						<br />
+
+						<form method="post" class="save-changes-form">
+								
+							<?php if(isset($params['msg'])): ?>
+								
+								<div class="alert alert-warning">
+
+									<?=$params['msg'];?>
+
+									<a href="javascript:;" class="fa fa-times" style="color:grey;float:right;text-decoration:none;" onclick="$(this).parent().fadeOut();"></a>
+			    			</div>
+
+							<?php endif; ?>
+
+
+							<table class="table">
+
+								<tr style="height:65px;">
+									
+									<th style="vertical-align: middle;width:30%;border-top:0">Name</th>
+									
+									<td style="border-top:0;vertical-align: middle;">
+
+										<input type="text" name="name" class="form-control" value="<?=$params['name']??'';?>" placeholder="New webspace name" maxlength="100" />
+									</td>
+								</tr>
+
+								<tr style="height:65px;">
+									
+									<th style="vertical-align: middle;width:30%;">Description</th>
+									
+									<td style="vertical-align: middle;">
+										
+										<textarea name="description" class="form-control" placeholder="Descriptive notes in this field may become useful" maxlength="1000"><?=$params['description']??'';?></textarea>
+									</td>
+								</tr>
+
+								<tr style="height:65px;">
+									
+									<th style="vertical-align: middle;width:30%;">Company name</th>
+									
+									<td style="vertical-align: middle;">
+
+										<input type="text" name="company" class="form-control" value="<?=$params['company']??'';?>" placeholder="example.com" maxlength="100" />
+									</td>
+								</tr>
+
+								<tr style="height:65px;">
+									
+									<th style="vertical-align: middle;width:30%;">Website</th>
+									
+									<td style="vertical-align: middle;">
+
+										<input type="text" name="website" class="form-control" value="<?=$params['website']??'';?>" placeholder="example.com" maxlength="100" />
+									</td>
+								</tr>
+
+							</table>
+
+						</form>
+							
+					</div>
+
+				</div>
+					
+				<br style="clear:both" />	
+			
+				<br style="clear:both" />	
+			
+
+				<div class="btn-toolbar save-changes-btn" style="width:100%;text-align:center;">
+
+					<a href="/webspaces">
+
+						<button class="btn btn-lg btn-default" style="padding-left:25px;padding-right:25px">
+							
+							<i class="fa fa-angle-left" style="margin-right:6px"></i>
+
+							Cancel
+						
+						</button>
+					</a>
+
+					<button class="btn btn-lg btn-success" style="padding-left:25px;padding-right:25px" onclick="$('.save-changes-form').submit();">
+
+						 Continue
+
+						 <i class="fa fa-angle-right" style="margin-left:6px"></i>
+					
+					</button>
+				
+				</div>
+
+				<br style="clear:both" />
+
+		
+			</div>
+
+		</div>
+
+</div>

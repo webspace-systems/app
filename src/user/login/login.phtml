@@ -1,0 +1,78 @@
+
+<section class="p-page-container">
+
+	<div class="nav-brand">
+		<a href="<?=config::get('url');?>" style="text-decoration: none;">
+			<img src="//back-end.ninja/assets/images/new_ninja.png"></img>
+		</a>
+	</div>
+
+	<div class="row m-n ">
+
+		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-xl-2 col-xl-offset-5 m-t-lg">
+
+			<section class="panel">
+
+				<header class="panel-heading text-center">
+					
+					Sign in
+
+				</header>
+				
+				<form method="post" class="panel-body">
+
+					<?php if(isset($params['msg'])): ?>
+
+						<div class="loginError">
+							
+							<b style="font-weight:700;">
+
+								<?=$params['msg'];?>
+							
+							</b>
+						</div>
+
+					<?php endif; ?>
+
+
+					<div class="form-group" style="width:100%;cursor:default">
+
+						<input type="text" placeholder="Username or Email" class="form-control" name="username" value="" />
+						
+					</div>
+			
+					<div class="form-group">
+				
+						<input type="password" id="inputPassword" placeholder="Password" class="form-control" name="password" />
+				
+					</div>
+				
+					<!--<a href="#" class="pull-right m-t-xs"><small>Forgot password?</small></a>-->
+				
+					<button type="submit" class="btn btn-success btn-block" style="opacity:0.9">Sign in</button>
+
+
+					<div
+					 class="line line-dashed"
+					 style="
+						margin-top: 15px;
+						border-bottom: 1px dashed lightgrey;
+						width: 85%;
+						margin-left: auto;
+						margin-right: auto;
+						margin-bottom: 5px;
+					 "
+					></div>
+
+					<p class="text-muted text-center">
+						<small style="cursor:default">
+							Don't have an account yet?
+						</small>
+					</p>
+					<a href="<?=config::get('url');?>/user/signup" class="btn btn-default btn-block" style="opacity:0.8">Setup your account today</a>
+
+				</form>
+			</section>
+		</div>
+	</div>
+</section>

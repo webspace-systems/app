@@ -1,0 +1,49 @@
+
+html, body {
+	font-size: 16px;
+	height: 100%;
+	width: 100%;
+	-webkit-overflow-scrolling: touch;
+	padding: 0px;
+	margin: 0px;
+	background-image: url('images/background/back-bg-3-fade-bottom.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: top;
+}
+
+
+
+.section {
+	padding: 80px 20px;
+	height: auto;
+	width: 100%;
+	overflow: hidden;
+}
+
+.section-inner {
+	height: auto;
+	width: 100%;
+	max-width: 900px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.center_prime_logo_title {
+	text-align: center;
+	height: 100%;
+	padding-top:;
+}
+
+
+
+
+
+
+.white-line-section {
+	background-color: white;
+	padding: 32px 24px;
+}
+
+
+

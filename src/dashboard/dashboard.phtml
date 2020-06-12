@@ -1,0 +1,579 @@
+<?php
+
+	$USER = [
+		'id' => 1,
+		'credentials' => [
+			'client' => [
+				'permissions' => [
+					'webspace' => []
+				]
+			]
+		],
+		'MEM' => [
+			'WS' => [
+				1 => [
+					'name' => 'Dummy WS',
+					'description' => 'Lorem ipsum li stohaj, vi er der ligsom dej. Uden undtagelse den sidste af dem alle uden lirum larum lej.',
+					'ftp' => [
+						'collected_info' => [
+							'files_count' => 0,
+							'folders_count' => 0
+						]
+					]
+				]
+			]
+		]
+	];
+
+	$WSID = 1;
+
+	$currentWS = $USER['MEM']['WS'][$WSID];
+
+	$isClient = false;
+
+	$fc = 0;
+
+
+?>
+
+
+
+<link rel="stylesheet" href="//back-end.ninja/assets/css/app.dashboard.css" type="text/css">
+
+<? if($GLOBALS['oneLastThing']==true): ?>
+
+	<script>
+
+		$(document).on('ready',function(){
+			$('#payment').modal();
+			setTimeout(function(){
+				$('.card-number').focus();
+			},800);
+		});
+
+	</script>
+
+<? endif; ?>
+
+
+<section class="hbox stretch">
+
+  <section id="content">
+    
+    <section class="vbox">
+      
+      <!--<br class="hiddel-xl hidden-lg hidden-md hidden-sm" style="line-height:50px;clear:both;" />-->
+      
+      <div class="mainSpinner" style="opacity: 0;">
+        <div class="sk-fading-circle">
+	        <div class="sk-circle1 sk-circle"></div>
+	        <div class="sk-circle2 sk-circle"></div>
+	        <div class="sk-circle3 sk-circle"></div>
+	        <div class="sk-circle4 sk-circle"></div>
+	        <div class="sk-circle5 sk-circle"></div>
+	        <div class="sk-circle6 sk-circle"></div>
+	        <div class="sk-circle7 sk-circle"></div>
+	        <div class="sk-circle8 sk-circle"></div>
+	        <div class="sk-circle9 sk-circle"></div>
+	        <div class="sk-circle10 sk-circle"></div>
+	        <div class="sk-circle11 sk-circle"></div>
+	        <div class="sk-circle12 sk-circle"></div>
+        </div>
+
+        <span style="display:none" class="still_loading">
+        	Still loading..<br><br>Keep loading time down<br>by watching your data sizes
+        </span>
+
+      </div>
+      
+      <section class="scrollable wrapper" style="opacity: 1;">
+
+
+
+				<br class="topMargin">
+
+			  <div class="row" style="margin:15px;min-height:90%">
+			    
+			    <div class="col-lg-4 col-md-5 col-sm-6">  
+
+			      
+				    <section class="panel">
+				      <header class="panel-heading featured lter no-borders">
+				        <div class="clearfix">
+				            <div class="m-t-xs m-b-xs" style="cursor:default;">
+				              Welcome               </div>
+				            <div class="h3 m-t-xs m-b-xs">
+				              Theis Pedersen              (theiscnp)              
+				            </div>
+				            
+				        </div>
+				        
+				      </header>
+				      <footer class="panel-footer bg-light lter text-center" style="overflow:hidden;padding-top:5;max-height:80px;">
+				        <div class="row pull-out">
+				          <div class="col-xs-4 bg-light" style="padding-left: 0;padding-right: 0;">
+				            <a href="/chooseAccountType">
+				              <div class="padder-v">
+				                <span class="m-b-xs h4 block" style="margin-bottom:0;max-height: 38px;">Admin</span>
+				                <small class="text-muted" style="vertical-align: -7px;"><i class="fa fa-magnet"></i> subscription</small>
+				              </div>
+				            </a>
+				          </div>
+				          <div class="col-xs-4 bg-xl-light" style="padding-left: 0;padding-right: 0;">
+				            <a href="/accounts">
+				              <div class="padder-v">
+				                <span class="m-b-xs h4 block" style="margin-bottom:0;max-height: 38px;">3 / 50</span>
+				                <small class="text-muted" style="vertical-align: -7px;"><i class="fa fa-cloud"></i> webspaces</small>
+				              </div>
+				            </a>
+				          </div>
+				          <div class="col-xs-4 bg-light" style="padding-left: 0;padding-right: 0;">
+				            <a href="/account-data-overview">
+				              <div class="padder-v">
+				                <span class="m-b-xs h4 block" style="margin-bottom:0;max-height: 38px;">
+
+				                  
+				                  0.1 %
+				                </span>
+				                <small class="text-muted" style="vertical-align: -7px;"><i class="fa fa-hdd-o"></i> data usage</small>
+				              </div>
+				            </a>
+				          </div>
+				        </div>
+				      </footer>
+
+
+
+
+
+				      <style>.opts a{padding-top:6px;padding-bottom:6px;}</style>
+				      
+				      <div class="list-group no-radius alt opts">
+				       
+			               
+			                
+			         
+			          <span id="_remObj_introToDevCMS" class="remBtn" style="opacity:0;z-index: 1000000000;float: right;margin-top: -29px;padding-right:10px;">
+			            <a href="#" class="btn btn-empty" style="padding: 4px;padding-top: 0;padding-bottom: 0;">
+			              <i class="fa fa-close pull-right" style="margin:0;color:#717171;"></i>
+			            </a>
+			          </span>
+			                  
+			                    
+		            <a id="_makeConnections" class="list-group-item remOpt" href="/people">
+		              <!-- <span class="badge bg-info">3</span> -->
+		              <i class="fa fa-users icon-muted" style="width: 18px; text-align: center; margin-right: 5px;"></i>
+		              Make connections
+		            </a>
+			            
+		            <span id="_remObj_makeConnections" class="remBtn" style="opacity:0;z-index: 1000000000;float: right;margin-top: -29px;padding-right:10px;">
+		              <a href="#" class="btn btn-empty" style="padding: 4px;padding-top: 0;padding-bottom: 0;">
+		                <i class="fa fa-close pull-right" style="margin:0;color:#717171;"></i>
+		              </a>
+		            </span>
+
+		          
+                <a id="_webspaces" class="list-group-item remOpt" href="/accounts">
+			            <!-- <span class="badge bg-info">3</span> -->
+			            <i class="fa fa-th-list icon-muted" style="width: 18px; text-align: center; margin-right: 5px;"></i>
+			            Manage Webspaces
+			          </a>
+
+                <a id="_setupWebspace" class="list-group-item remOpt" href="/webspace/new">
+			            <!-- <span class="badge bg-info">3</span> -->
+			            <i class="fa fa-cloud icon-muted" style="width: 18px; text-align: center; margin-right: 5px;"></i>
+			            Setup new webspace
+			          </a>
+			          
+
+			          <a id="_accountSettings" class="list-group-item remOpt" href="#accountSettings" data-toggle="modal">
+			            <i class="fa fa-wrench icon-muted" style="width: 18px; text-align: center; margin-right: 5px;"></i> 
+			            Account Settings
+			          </a>
+
+			          <span id="_remObj_accountSettings" class="remBtn" style="opacity:0;z-index: 1000000000;float: right;margin-top: -29px;padding-right:10px;">
+			            <a href="#" class="btn btn-empty" style="padding: 4px;padding-top: 0;padding-bottom: 0;">
+			              <i class="fa fa-close pull-right" style="margin:0;color:#717171;"></i>
+			            </a>
+			          </span>
+
+			                          
+			          <a id="_support" class="list-group-item remOpt" href="/support">
+			            <i class="fa fa-life-bouy icon-muted" style="width: 18px; text-align: center; margin-right: 5px;"></i> 
+			            Support
+			          </a>
+
+				      </div>
+				      
+				    </section>
+			        
+			    </div>
+			    
+      
+
+
+    			<div class="col-lg-4 col-md-6 col-sm-6" style="height: autopx;">
+
+
+
+
+						<section class="panel">
+						  <div class="panel-body" style="padding-top:0;<?=$isClient?'pointer-events:none;':'';?>">
+						    <div class="clearfix text-center m-t">
+						      <div class="inline" style="position:relative;top:-10px;">
+						        
+						        <?php
+
+						        	if(isset($currentWS['name'])):
+						        ?>
+
+						         <a <?=!$isClient?'href="/webspace"':'';?>">
+
+						        <?php
+
+						      		endif;
+						      	?>
+
+						          <span class="easypiechart easyPieChart" data-percent="75" data-line-width="5" data-loop="false" data-bar-color="#92cf5c" data-track-color="#f5f5f5" data-scale-color="false" data-size="150" style=" height: 100px; line-height: 150px;">
+						            <center style="max-height: 100px;/*overflow: hidden;*/">
+						              <div class="thumb-lg" style="width:65px;">
+						                <i class="fa fa-cloud" style="font-weight:bold;font-size:65px;height:75px"></i>
+						                
+						              </div>
+						            </center>
+						          </span>
+
+						        <?php
+
+						        	if(isset($currentWS['name'])):
+						        ?>
+						          </a>
+
+						        <?php
+						      		endif;
+						      	?>  
+						        
+						        <div class="h4 m-t m-b-xs">
+						         <a href="#" class="dropdown-toggle selectWSlabel" data-toggle="dropdown" style="display: inline-block;">
+						          <!-- <i class="fa fa-cloud"></i> -->
+						          <?php
+
+						          	if(isset($currentWS['name']))
+						          		print($currentWS['name']);
+						          	else
+						          		print('Webspaces');
+						          ?>
+
+						          <?=!$isClient?'<b class="caret"></b>':'';?>
+
+						         </a>
+
+
+
+							        <ul class="dropdown-menu selectWS" style="margin-left:-20px;">
+
+							          <?php
+
+							          	$wsc=0;
+							          	
+							          	foreach($USER['MEM']['WS'] as $id=>$ws):
+
+							          		if(intval($id)==0) continue;
+
+							          		if(!is_array($ws) && substr($ws,0,5)=='#data')
+							          		{
+							          			$ws=ud_read("MEM/WS/".$id);
+
+							          			if(count($ws)==0
+							          					|| strlen($ws['name'])<2
+							          					|| (
+							          							$isClient&&$ws['default']==true
+							          							&& isset($USER['MEM']['WS'][$id])
+							          					)
+							          			)
+							          			{
+							          				continue;
+							          			}
+
+							          			$wsc++;
+
+							          			?>
+									
+										            <li
+										            	class="<?=$id==$WSID?'active':'';?>"
+										            	style="text-align: left"
+										            >
+										            	<a href="#" data-wsid="<?=$id;?>">
+
+										            		<?=$ws['name'];?>
+									            		</a>
+									            	</li>
+							          
+						          				<?php
+
+						          			}
+
+							        		endforeach;
+
+							        	?>
+
+							          <?php if($wsc==0): ?>
+
+							            <li><a href="/webspace/new/ftp">Create a webspace</a></li>
+
+							          <?php endif; ?>
+
+							        </ul>
+
+						        </div>
+
+						        <?php
+
+						        	if($currentWS['description']):
+
+						        		
+						        		echo $currentWS['description'];
+
+						        	elseif(isset($currentWS['git'])):
+
+						    				?>
+
+								      		<small class="text-muted m-b">
+								      			<?php
+								      				if(isset($currentWS['name']))
+								      				{
+								      					if($currentWS['git']['connected'])
+								      						print('<i class="fa fa-git"></i> Github repository');
+								      					else
+								      						print('<i class="fa fa-unlink"></i> Git connection failed');
+								      				}
+								      				else
+								      				{
+								      					print('<i class="fa fa-ban"></i> No git connection');
+								      				}
+								      			?>
+								    			</small>
+
+							   				<?php
+
+						    			elseif(
+						    					isset($currentWS['ftp'])
+							    				&& is_array($currentWS['ftp'])
+							    				&& !$currentWS['ftp']['default']
+							    				&& $currentWS['ftp']['host']!='webspace.systems'
+							    				&& $currentWS['ftp']['host'] != $_FTP['host']
+							    		):
+							    			
+							    			?>
+
+										      <small class="text-muted m-b">
+
+										      	<?php
+
+										      		if(isset($currentWS['name']))
+										      		{
+										      			if($currentWS['ftp']['connected'])
+										      				print('<i class="fa fa-link"></i> Connected to server');
+										        		else
+										        			print('<i class="fa fa-unlink"></i> Could not reach server');
+										        	}
+										        	else
+										      		{
+										      			print('<i class="fa fa-ban"></i> No server connection');
+										      		}
+										      	?>
+										    	</small>
+
+						      			<?php
+						          
+						        	else:
+
+						        		?>
+							            
+							            <small class="text-muted m-b"></small>
+
+							        	<?php
+
+						      		endif;
+							      		
+							      	?>
+
+						      </div>
+						    </div>
+						  </div>
+						  
+
+
+						  <footer class="panel-footer lter text-center bg-transparent">
+						    <div class="row pull-out">
+
+						      <?php
+
+						        $displayed = 0;
+
+
+										$WebspaceShortcuts = array(
+										  'configure-integrations' => array(
+									      'link' => '/webspace/configure/integrations',
+									      'font-icon-class' => 'fa fa-wrench',
+									      'name' => 'Configure integrations',
+									      'block' => '<span class="fa fa-globe currentFoldersCount"></span>'.
+									                 ' / '.
+									                 '<span class="fa fa-git currentFilesCount"></span>'
+									    ),
+										  'browse-tools' => array(
+									      'link' => '/tools',
+									      'font-icon-class' => 'fa fa-th',
+									      'name' => 'Browse Tools',
+									      'block' => '<span class="fa fa-cubes currentFilesCount"></span>'
+									    ),
+										  'cms' => array(
+									      'link' => '/cms',
+									      'font-icon-class' => 'fa fa-cube',
+									      'name' => 'CMS',
+									      'block' => '<span class="fa fa-indent currentFilesCount"></span>'
+									    ),
+										  'media-manager' => array(
+									      'link' => '/media-manager',
+									      'font-icon-class' => 'fa fa-cube',
+									      'name' => 'Media Manager',
+									      'block' => '<span class="fa fa-picture-o currentFilesCount"></span>'
+									    ),
+										  'finder' => array(
+									      'link' => '/finder',
+									      'font-icon-class' => 'fa fa-folder-open',
+									      'name' => 'Files & folders',
+									      'block' => '<span class="currentFilesCount">'.$fc=$currentWS['ftp']['collected_info']['files_count'].($fc>0?$fc:'N/A').'</span> / <span class="currentFoldersCount">'.$fc=$currentWS['ftp']['collected_info']['folders_count'].($fc>0?$fc:'N/A').'</span>'
+									    ),
+										  'code' => array(
+									      'link' => '/code',
+									      'font-icon-class' => 'fa fa-cube',
+									      'name' => 'Code',
+									      'block' => '<span class="fa fa-code currentFilesCount"></span>'
+									    ),
+										  'updates' => array(
+									      'link' => '#',
+									      'font-icon-class' => 'fa fa-rss',
+									      'name' => 'Updates',
+									      'block' => '<span style="color:rgba(128, 128, 128,0.5);">No recent updates</span>'
+									    )
+										);
+
+						        $RelevantWebspaceShortcuts = [];
+						        $RelevantWebspaceShortcuts[] = $WebspaceShortcuts['configure-integrations'];
+										$RelevantWebspaceShortcuts[] = $WebspaceShortcuts['cms'];
+										$RelevantWebspaceShortcuts[] = $WebspaceShortcuts['code'];
+										$RelevantWebspaceShortcuts[] = $WebspaceShortcuts['media-manager'];
+										$RelevantWebspaceShortcuts[] = $WebspaceShortcuts['finder'];
+										$RelevantWebspaceShortcuts[] = $WebspaceShortcuts['browse-tools'];
+										$RelevantWebspaceShortcuts[] = $WebspaceShortcuts['updates'];
+
+
+						        foreach($RelevantWebspaceShortcuts as $in=>$sc):
+
+						          ?>
+
+						          <div class="col-xs-<?=count($RelevantWebspaceShortcuts)>1?6:12;?> bg-light" style="height:90px;<?=strlen($sc['link'])<2?'pointer-events:none':'';?>">
+						            <a href="<?=$sc['link'];?>">
+						              <div class="padder-v">
+						                <small class="text-muted" style="display:inline-block;height:30px;"><i class="<?=$sc['font-icon-class'];?>"></i> <?=$sc['name'];?></small>
+						                <br style="clear:both" />
+						                <span class="m-b-xs h4 block" style="margin-top:5px"> <?=$sc['block'];?> </span>
+						              </div>
+						            </a>
+						          </div>
+
+						          <?php
+
+						          $displayed++;
+						          if($displayed == 2) break;
+
+						        endforeach;
+
+						      ?>
+
+						    </div>
+						  </footer>
+						  
+						  <?php /*
+						  <?php if($ApplicationsInstalled['finder']): ?>
+						  
+						  <footer class="panel-footer lter text-center bg-transparent">
+						    <div class="row pull-out">
+						      <div class="col-xs-6 bg-light" style="height:90px;">
+						        <a href="<?php if($isClient!=true){ ?>/webspace<?php }else print('javascript:void();'); ?>">
+						          <div class="padder-v">
+						            <small class="text-muted" style="display:inline-block;height:30px;"><i class="en">&#59194;</i> Updates</small>
+						            <span class="m-b-xs h4 block"> <span style="color:rgba(128, 128, 128,0.5);">No recent updates</span></span>
+						          </div>
+						        </a>
+						      </div>
+						      <div class="col-xs-6 bg-light" style="height:90px;">
+						        <a href="<?php if($isClient!=true){ ?>/finder<?php }else print('javascript:void();'); ?>">
+						          <div class="padder-v">
+						            <small class="text-muted" style="display:inline-block;height:30px;"><i class="fa fa-folder-open"></i> Files & folders</small>
+						            <span class="m-b-xs h4 block">
+						              <span class="currentFilesCount"><?php $fc=$currentWS['ftp']['collected_info']['files_count'];if($fc>0)print($fc);else print('N/A');?></span>
+						              /
+						              <span class="currentFoldersCount"><?php $fc=$currentWS['ftp']['collected_info']['folders_count'];if($fc>0)print($fc);else print('N/A');?></span>
+						            </span>
+						          </div>
+						        </a>
+						      </div>
+						    </div>
+						  </footer>
+
+						  <?php endif; ?>
+						  */ ?>
+
+						</section>
+
+					</div>
+
+
+
+					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" style="float:right">
+				    <section class="panel">
+				      <div class="panel-body">
+				        <div class="clearfix text-center m-t">
+				          <div class="inline" style="float:left">
+				            <div class="easypiechart easyPieChart" data-percent="75" data-line-width="5" data-loop="false" data-bar-color="#92cf5c" data-track-color="#f5f5f5" data-scale-color="false" data-size="75" style="width: 75px; height: 75px; line-height: 75px;">
+				              <div class="thumb-lg">
+				                <img src="//back-end.ninja/assets/images/anon_user.png" class="img-circle" style="height:75px">
+				              </div>
+				              <canvas width="150" height="150"></canvas>
+				            </div>
+				          </div>  
+				            <div class="h4 m-t m-b-xs">Theis Pedersen</div>
+				            <small class="text-muted m-b">Student Developer</small>                    
+				        </div>
+				      </div>
+				      
+				      <footer class="panel-footer lter" style="padding:15px;padding-top:25px;padding-bottom:15px;background-color:rgba(249, 250, 252, 0.8);overflow:hidden;">
+				        
+				        <center>
+
+				          You haven't yet setup your profile.<br>
+				          Setup and activate your profile, to make connections with <a href="/people">People</a>.
+				          <br><br>
+				          <a href="/people/profile/setup" class="btn btn-primary" style="padding-top:5px"><i class="fa fa-pencil" style="margin-right:5px;"></i>Setup your Profile</a>
+
+				        </center>
+				            
+				        <br style="clear:both;">
+				        
+				      </footer>
+				      
+				    </section>
+
+        	</div>
+
+				</div>
+
+			</section>
+
+		</div>
+
+	</div>
+
+</section>

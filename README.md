@@ -1,1 +1,139 @@
-# -platform-
+# "Platform" #
+
+- [__router.php__](#routerphp)
+
+- [__app.php__](#appphp)
+
+- - [__config.php__](#configphp)
+
+- - [__template__](#template)
+
+- - [__asset_load_controller__](#asset_load_controller-plugin)
+
+- - [__public__](#public)
+
+- [__error/trait.php__](#errortraitphp)
+
+- [__error/error.js__](#errorerrorjs): front-end error handling
+
+- [__sql/trait.php__](#sqltraitphp): 'sql' and wrapper funct.
+
+- [__user/trait.php__](#usertraitphp): login funct. with method 'user']
+
+
+- [__Notes__](#notes)
+- [__About PHP "Traits"__](#about-php-traits)
+
+
+## router.php ##
+
+
+
+## app.php ##
+
+See [index.php](index.php)
+
+ - See component [user/login](user/login) for example of component working as page module.
+
+ - A component can also supply php traits like sql and error handling, or js like functions for ajax communication.
+
+
+### config.php ###
+
+Simply configure the platform with a php array global $CONFIG.
+
+
+### template ###
+
+Front-end template HTML, CSS, JS.
+
+
+### asset_load_controller plugin ###
+
+JS feature to ensuring complete loading of all css and js assets (and maybe iframes?).
+Compiled and inserted directly in the header.
+[https://github.com/theiscnp/Asset_Load_Controller](https://github.com/theiscnp/Asset_Load_Controller)
+
+
+### public ###
+
+Thought as a creative name for the default public frontpage website.
+
+
+## error/trait.php ##
+
+function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = false, $code = 500 )
+- just proxy for static \_error:
+
+*static* function __\_error__($msg = "", $add_data = [], $die = true, $is_user_fault = false, $code = 500)
+- Arguments $die and $code may switch places
+
+*static* function __\_on_error__($errno, $errstr, $errfile, $errline, $in_shutdown = false){
+- to handle php errors and funct. 'trigger_error'. Note btw that trigger_error() only supports the E_USER_* class of warnings.
+- just require error/trait.php && set_error_handler(['_error','\_on_error']);
+- prevents default error handling
+
+*static* function __\_on_shutdown__(){ Pass error_get_last() to __\_on_error__ }
+- to handle fatal errors, make sure the error/trait.php is required and `register_on_shutdown(['_error','_on_shutdown']);`
+
+
+## error/error.js ##
+
+front-end error handling
+
+
+## sql/trait.php ##
+
+always returning sql instance having once been given config in 1st param.
+
+
+## user/trait.php ##
+
+Simple user system incl. trait function 'user'
+
+
+
+## Notes ##
+
+...
+- pluralisation rules
+
+
+
+## About PHP "Traits" ##
+
+Traits extend the class applied to.
+The methods of the trait are protected agains overwriting if not extended like `parent::__construct();`.
+Apply using the 'use'-statement like this:
+
+```php
+
+trait _connection_trello {
+
+	function connect_trello(){
+
+		return "Fancy shit";
+	}
+}
+
+class kanban extends app {
+
+	use _connection_trello;
+
+	// ...
+}
+
+print((new kanban())->connect_trello()); // "Fancy shit"
+
+```
+
+*
+Traits are a mechanism for code reuse in single inheritance languages such as PHP. A Trait is intended to reduce some limitations of single inheritance by enabling a developer to reuse sets of methods freely in several independent classes living in different class hierarchies. The semantics of the combination of Traits and classes is defined in a way which reduces complexity, and avoids the typical problems associated with multiple inheritance and Mixins.
+
+A Trait is similar to a class, but only intended to group functionality in a fine-grained and consistent way. It is not possible to instantiate a Trait on its own. It is an addition to traditional inheritance and enables horizontal composition of behavior; that is, the application of class members without requiring inheritance.
+*
+[See php.net/manual/en/language.oop5.traits.php](https://www.php.net/manual/en/language.oop5.traits.php)
+
+
+
+
