@@ -5,8 +5,6 @@ class user_signup extends app {
 
 	function GET($params = []){
 
-		global $CONFIG;
-
 		$this->template_header();
 
 		require_once __DIR__.'/signup.phtml';
@@ -16,8 +14,6 @@ class user_signup extends app {
 
 
 	function POST($params = []){
-
-		global $CONFIG;
 
 		$error_fields = [];
 
@@ -87,7 +83,7 @@ class user_signup extends app {
         	'MIME-Version: 1.0' . "\r\n"
         	.'Content-type: text/html; charset=iso-UTF-8'."\r\n"
         	.'To: '.$params['name'].' <'.$params['email'].'>' . "\r\n"
-        	.'From: Customer Service - '.$CONFIG['platform_name'].' <noreply@'.$_SERVER['HTTP_HOST'].'>'."\r\n"
+        	.'From: Customer Service - '.config::get('platform_name').' <noreply@'.$_SERVER['HTTP_HOST'].'>'."\r\n"
         )
         or die('Unable to send mail');
 

@@ -4,8 +4,6 @@ class user_signup_confirm extends app {
 
 	function GET($params = []){
 
-		global $CONFIG;
-
 
 		if(!isset($params['code'])) return $this->respond(['error'=>'Bad code'],400);
 

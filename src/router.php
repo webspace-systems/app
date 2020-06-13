@@ -109,6 +109,13 @@ class router {
 				return file_exists($test_path) ? $test_path : null;
 			},
 
+			'exact/2ndlastname.php' => function(string $base_path, array $paths) :? string {
+
+				$test_path = $base_path.'/'.implode('/', $paths).'/ '.implode('/',array_slice($paths, -2,1)).'.php';
+
+				return file_exists($test_path) ? $test_path : null;
+			},
+
 			'exact/trait.php' => function(string $base_path, array $paths)  :? string {
 
 				if(substr($paths[0],0,1) != '_') return null;
@@ -116,6 +123,15 @@ class router {
 				$paths[0] = substr($paths[0],1);
 
 				$test_path = $base_path.'/'.implode('/',$paths).'/trait.php';
+
+				return file_exists($test_path) ? $test_path : null;
+			},
+
+			'exact/2ndlastname.php trimmed' => function(string $base_path, array $paths) :? string {
+
+				array_walk($paths, function(&$path, $k){ $path = trim($path, '_'); });
+
+				$test_path = $base_path.'/'.implode('/', $paths).'/'.implode('/',array_slice($paths, -2,1)).'.php';
 
 				return file_exists($test_path) ? $test_path : null;
 			},

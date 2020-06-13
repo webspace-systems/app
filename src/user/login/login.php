@@ -49,7 +49,7 @@ class user_login extends app {
 			return $this->GET(['msg'=>'Please check your e-mail inbox or spam folder for a link to confirm and activate your account.']);
 
 		if($user['status'] > 1)
-			return $this->GET(['msg'=>'Unable to sign in. Please contact '.$CONFIG['emails']['support']]);
+			return $this->GET(['msg'=>'Unable to sign in. Please contact '.config::get('emails')['support']]);
 
 
 		if( $this->user($user) )

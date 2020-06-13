@@ -1,0 +1,152 @@
+<?php
+	
+	$USER = [
+		'id' => 1,
+		'credentials' => [
+			'client' => [
+				'permissions' => [
+					'webspace' => []
+				]
+			]
+		],
+		'MEM' => [
+			'WS' => []
+		]
+	];
+
+	$rUSER = $USER;
+
+	$ApplicationsInstalled = [];
+
+
+	$WS = [
+		'name' => 'Dummy WS',
+		'tools' => []
+	];
+
+	$isClient = false;
+
+?>
+
+
+<div id="topMenu">
+
+	<!--
+	<a href="#" class="item top-menu-expand visible-xs">
+		<i class="fa fa-navicon"></i>
+	</a>
+	-->
+
+	<a href="<?=$this->get_url()?>/" class="item logo-icon fi">
+		<img src="<?=config::get('url');?>/images/white-ninja-icon.png"></img>
+	</a>
+
+	<!--
+	<div class="item">
+		<i class="fa fa-link"></i>
+	</div>
+	-->
+
+	<?php if(is_array($USER)): ?>
+		
+		<a class="item cws dropdown-toggle selectWSlabel" data-toggle="dropdown" onclick="var sml=$(this).parent().find('.fi').css('width');$(this).parent().find('.selectWS').css('margin-left',sml);$(this).parent().find('.selectWS').css('min-width',$(this).css('width'));">
+			<span class="ws-select-name">
+
+				<?=$WS['name'];?>
+			</span>
+			<span class="ws-select-caret"><i class="fa fa-angle-down"></i></span>
+		</a>
+	    <ul class="dropdown-menu selectWS" style="margin-left:25px;z-index:10000000;">
+
+		    <?php foreach($Accounts as $account): ?>
+
+		      <li
+		       class="<?=$account['id']==$User->active_account?'active':'';?>"
+		       style="text-align: left"
+		      >
+		      	<a href="<?=$this->get_url()?>/user/set_active_account?id=<?=$account['id'];?>"><?=$account['name'];?></a></li>
+
+		    <?php endforeach; ?>
+
+	      	<li><a href="<?=$this->get_url()?>/accounts/new">Create new webspace</a></li>
+	    </ul>
+
+	    
+
+	    <?php foreach($ApplicationsInstalled as $pi=>$app): ?>
+
+	    	<?php $ToolInWebspace = $WS['tools'][$pi]; ?>
+
+	    	<?php if(!$app['in-main-menu'] && !isset($ToolInWebspace['show-in-main-menu']) ) continue; ?>
+	    	<?php if(isset($ToolInWebspace['show-in-main-menu']) && !$ToolInWebspace['show-in-main-menu'] ) continue; ?>
+	    	<?php if(!$app['clients-allowed'] && $isClient) continue; ?>
+
+			<a href="<?=$app['link'];?>" title="<?=$app['name'];?>" class="item hidden-xs">
+				<?=$app['icon-custom']?$app['icon-custom']:'<i class="fa fa-'.$app['icon'].'"></i>';?>
+			</a>
+
+	    <?php endforeach; ?>
+
+		<a href="javascript:;" title="Apps" class="item visible-xs full-screen-apps-menu-toggle" style="display:none">
+			<i class="fa fa-th-list" style="position:relative;top:1px;"></i>
+		</a>
+
+
+		<!-- right side -->
+
+
+		<a href="<?=$this->get_url()?>/user/logout" class="item last pull-right logout">
+			<i class="fa fa-sign-out"></i>
+		</a>
+
+		<a href="#accountSettings" data-toggle="modal" class="item pull-right hidden-xs" target="_top">
+			<i class="fa fa-cogs"></i>
+		</a>
+
+	<?php else: ?>
+
+		<a href="<?=$this->get_url()?>/" class="item last pull-right">
+			<i class="fa fa-sign-in"></i>
+		</a>
+
+		<a href="<?=$this->get_url()?>/support" class="item pull-right">
+			<i class="fa fa-life-bouy"></i>
+		</a>
+
+	<?php endif; ?>
+
+</div>
+
+
+
+
+
+
+<div id="full-screen-apps-menu">
+            
+	<a href="<?=$this->get_url()?>/accounts" title="Webspace" class="item">
+		<i class="fa fa-cloud"></i>
+	</a>
+
+	<a href="<?=$this->get_url()?>/people" title="People" class="item">
+		<i class="fa fa-users"></i>
+	</a>
+
+	<a href="<?=$this->get_url()?>/cms" title="CMS" class="item">
+		<i class="fa fa-indent"></i>
+	</a>
+
+	<a href="<?=$this->get_url()?>/tool/crypter" title="Crypter" class="item">
+		<i class="fa fa- octicon octicon-key"></i>
+	</a>
+
+    <a href="#accountSettings" data-toggle="modal" class="item" target="_top">
+      <i class="fa fa-cogs"></i>
+    </a>
+
+    <a href="<?=$this->get_url()?>/support" data-toggle="modal" class="item" target="_top">
+      <i class="fa fa-life-bouy"></i>
+    </a>
+
+  </div>
+

@@ -4,8 +4,6 @@ class user_forgotten_reset extends app {
 
 	function GET($params = []){
 
-		global $CONFIG;
-
 		$this->template_header();
 
 		require_once __DIR__.'/reset.phtml';
@@ -15,8 +13,6 @@ class user_forgotten_reset extends app {
 
 
 	function POST($params = []){
-
-		global $CONFIG;
 
 
 		if(!isset($params['code'])) return $this->respond(['error'=>'Bad code'],400);

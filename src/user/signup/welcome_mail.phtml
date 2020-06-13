@@ -43,7 +43,7 @@
 
   <div class="c-container">
 
-    <img src="<?=config::get('url');?>/<?=$CONFIG['email_template']['header_image'];?>" style="float:right;height:38px;"></img>
+    <img src="<?=config::get('url');?>/<?=config::get('email_template')['header_image'];?>" style="float:right;height:38px;"></img>
     
     <div class="c-inner-container">
       <p>Hello <?=$Recipient_Name;?></p>
@@ -55,7 +55,7 @@
         <br />
         However, if not, or if you have any questions or helpful comments, feel free to write me an email at: <a href="mailto:support@<?=$_SERVER['HTTP_HOST'];?>">support@<?=$_SERVER['HTTP_HOST'];?></a>
       </p>
-      <p><?=$CONFIG['meta']['author'];?><br /><?=$CONFIG['platform_name'];?></p>
+      <p><?=config::get('meta')['author'];?><br /><?=config::get('platform_name');?></p>
 
     </div>
   </div>

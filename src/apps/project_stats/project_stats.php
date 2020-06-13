@@ -29,9 +29,6 @@ class project_stats extends app {
   }
 
 	function index($params = []){
-exit('wtf coolest');
-
-		global $CONFIG;
 
 		$this->template_header();
 
@@ -41,6 +38,19 @@ exit('wtf coolest');
 
 		$this->template_footer();
 	}
+
+
+  function POST(){
+    
+    if(isset($_REQUEST['settings']))
+    {
+      $this->set_settings($_REQUEST['settings']);
+    }
+
+    $this->draw_stats();
+
+    $this->GET();
+  }
 
 
   function load_session(){
@@ -63,27 +73,6 @@ exit('wtf coolest');
       $this->settings = array_merge($this->settings, $settings);
     }
   }
-
-
-
-
-  function POST(){
-    
-    if(isset($_REQUEST['settings']))
-    {
-      $this->set_settings($_REQUEST['settings']);
-    }
-
-    $this->draw_stats();
-
-    $this->GET();
-  }
-
-
-
-
-
-
 
 
   function render_exclude_paths_options_html($html = ''){

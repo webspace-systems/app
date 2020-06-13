@@ -4,7 +4,40 @@ class app {
 
 	use _sql;
 	use _error;
-	use _template;
+	use _template_002;
+
+
+
+	static function get_url( $incl_path = false, $incl_qs = false ) : string {
+
+		$use_https = substr($_SERVER['SERVER_PROTOCOL'], 0, 5) != 'HTTP/';
+
+		$url = ($use_https?'https':'http') . '://' . $_SERVER['HTTP_HOST'];
+
+		$path = trim( urldecode($_SERVER['REQUEST_URI']), '/');
+
+		if($incl_qs)
+		{
+			$path = substr($path, 0, strpos($path.'?', '?'));
+		}
+
+		$url_subdir = trim(substr(__DIR__,strlen($_SERVER['DOCUMENT_ROOT'])),'/');
+
+		if($url_subdir && substr($path,0,strlen($url_subdir)) == $url_subdir)
+		{
+			// Cut to relative path if in sub-directory to the base-url, e.g. localhost/platform
+			$path = trim(substr($path,strlen($url_subdir)),'/');
+
+			$url .= '/' . $url_subdir;
+		}
+
+		if($incl_path)
+		{
+			$url .= '/' . $path;
+		}
+
+		return $url;
+	}
 
 	
 	private $_request_data = null;
