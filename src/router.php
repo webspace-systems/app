@@ -91,6 +91,17 @@ class router {
 				return file_exists($test_path) ? $test_path : null;
 			},
 
+			'index_popped' => function(string $base_path, array $paths) :? string {
+
+				if(end($paths) != 'index') return null;
+
+				array_pop($paths);
+
+				$test_path = $base_path.'/'.implode('/', $paths).'/'.end($paths).'.php';
+
+				return file_exists($test_path) ? $test_path : null;
+			},
+
 			'exact/lastname.php' => function(string $base_path, array $paths) :? string {
 
 				$test_path = $base_path.'/'.implode('/', $paths).'/'.end($paths).'.php';
@@ -135,3 +146,4 @@ class router {
 		];
 	}
 }
+
