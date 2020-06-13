@@ -2,6 +2,8 @@
 
 class accounts_new extends app {
 
+	use _user;
+
 	function __construct(){
 
 		$this->user_require();

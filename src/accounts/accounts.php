@@ -2,9 +2,13 @@
 
 class accounts extends app {
 
+	use _user;
+
 	public $_accounts = [];
 
 	function __construct( $account_id = null ){
+
+		$this->user_require();
 
 		if(is_numeric($account_id))
 		{
