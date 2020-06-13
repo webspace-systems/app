@@ -91,7 +91,7 @@ class router {
 				return file_exists($test_path) ? $test_path : null;
 			},
 
-			'index_popped' => function(string $base_path, array $paths) :? string {
+			'index popped' => function(string $base_path, array $paths) :? string {
 
 				if(end($paths) != 'index') return null;
 

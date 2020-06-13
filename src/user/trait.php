@@ -2,8 +2,6 @@
 
 trait _user {
 
-	use _error;
-
 	private $_user = null;
 
 	function user( array $set = null, bool $override = false ) :? user {

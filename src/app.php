@@ -2,10 +2,9 @@
 
 class app {
 
-	use _sql;
 	use _error;
+	use _sql;
 	use _template_002;
-
 
 
 	static function get_url( $incl_path = false, $incl_qs = false ) : string {

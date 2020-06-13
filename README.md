@@ -31,9 +31,9 @@
 
 ## app.php ##
 
-See [index.php](index.php)
+See [index.php](src/index.php)
 
- - See component [user/login](user/login) for example of component working as page module.
+ - See component [user/login](src/user/login) for example of component working as page module.
 
  - A component can also supply php traits like sql and error handling, or js like functions for ajax communication.
 
