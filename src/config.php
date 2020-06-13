@@ -1,6 +1,6 @@
 <?php
 
-class config extends singleton { }
+class config extends model { use singleton; }
 
 new config();
 

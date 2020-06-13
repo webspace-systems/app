@@ -1,6 +1,6 @@
 <?php
 
-class singleton extends model {
+trait singleton {
  
 	// Keeping always one instance only
 	// proxying calls to that
