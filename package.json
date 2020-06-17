@@ -1,0 +1,11 @@
+{
+	"name": "app",
+	"version": "1.0.0",
+	"scripts": {
+		"test": "bash scripts/test.sh",
+		"build": "bash scripts/test.sh && bash scripts/build.sh"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.0.0"
+	}
+}

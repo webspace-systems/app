@@ -1,5 +1,5 @@
 <?php
-
+s
 class app {
 
 	use _error;
