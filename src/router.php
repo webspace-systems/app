@@ -16,7 +16,7 @@ class router {
 
 
 		$exclude_files = [
-			__DIR__.'/index.php'
+			__DIR__.'/entry.php'
 		];
 
 		$included_files = get_included_files();
