@@ -3,7 +3,7 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-printf "Syntax checking .php & .phtml files in app/src (src/plugins excluded)... \n\n\n";
+printf "Syntax checking .php & .phtml files in app/src (excl. plugins)... \n\n\n";
 
 printf "\e[31m"; # red
 
