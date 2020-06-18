@@ -3,25 +3,52 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-printf "Syntax checking .php & .phtml files in app/src (excl. plugins)... \n\n\n";
 
-printf "\e[31m"; # red
+verbose=false
 
-if (find src -type f \( -name "*.php" -or -name "*.phtml" \) -not -path "*/plugins/*" -exec php -l '{}' \; | grep '^No syntax errors' -v )
+if [ "$1" == '-v' ]
 then
-	printf "${normal}";
+	verbose=true
+fi
 
-	printf "\n\n\n\n${bold}";
 
-	printf "Test failed. See errors above";
+printf "Syntax checking .php & .phtml files in app/src (excl. plugins)... \n"
 
-	printf "${normal}\n\n\n";
 
-	exit 1;
-fi;
+files=$( find src -type f \( -name "*.php" -or -name "*.phtml" \) -not -path "*/plugins/*" )
 
-printf "\e[32m"; # green
+for filepath in $files
+do
+	result=$(php -l "$filepath")
 
-printf "OK: FOUND NO PROBLEMS";
+	if [[ $result == *"No syntax errors"* ]]
+	then
 
-printf "${normal}";
+		if [[ "$verbose" = true ]]
+		then
+	    	printf "\n\e[32m OK  ${normal} $filepath"
+	    else
+	    	printf "."
+	    fi
+
+    else
+		printf "\n\e[31m ERR ${normal} $filepath"
+
+		printf "\n\n\n\e[31m\e[3m${result}"
+
+		printf "\n\n\n\n${normal}"
+
+		exit 1
+	fi
+done
+
+
+if [ "$verbose" = true ]
+then
+	printf "\n\n"
+else
+	printf "\n"
+fi
+
+printf "Done. No errors found."
+

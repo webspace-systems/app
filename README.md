@@ -1,4 +1,5 @@
-# app #
+
+
 
 - [__router.php__](#routerphp)
 
@@ -20,16 +21,33 @@
 
 - [__user/trait.php__](#usertraitphp): login funct. with method 'user']
 
+- [__scripts/test.sh__](#scriptstestsh)
+
+- - [__scripts/tests/php_syntax.sh__](#scriptstestsphp_syntaxsh)
+
+- - [__scripts/tests/php_tests.sh__](#scriptstestsphp_testssh)
 
 - [__Notes__](#notes)
-- [__About PHP "Traits"__](#about-php-traits)
+
+- - [__About PHP "Traits"__](#about-php-traits)
 
 
-## router.php ##
 
 
 
-## app.php ##
+
+
+
+# router.php #
+
+[...]
+
+
+
+
+
+
+# app.php #
 
 See [index.php](src/index.php)
 
@@ -38,28 +56,35 @@ See [index.php](src/index.php)
  - A component can also supply php traits like sql and error handling, or js like functions for ajax communication.
 
 
-### config.php ###
+## config.php ##
+
+[...]
 
 
+## template ##
 
-### template ###
-
-Front-end template HTML, CSS, JS.
+Template front-end [...]
 
 
-### asset_load_controller plugin ###
+## plugins/asset_load_controller ##
 
 JS feature to ensuring complete loading of all css and js assets (and maybe iframes?).
 Compiled and inserted directly in the header.
 [https://github.com/theiscnp/Asset_Load_Controller](https://github.com/theiscnp/Asset_Load_Controller)
 
 
-### public ###
+
+## public ##
 
 Thought as a creative name for the default public frontpage website.
 
 
-## error/trait.php ##
+
+
+
+# error/trait.php #
+
+[Probably outdated]
 
 function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = false, $code = 500 )
 - just proxy for static \_error:
@@ -76,23 +101,66 @@ function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = fa
 - to handle fatal errors, make sure the error/trait.php is required and `register_on_shutdown(['_error','_on_shutdown']);`
 
 
-## error/error.js ##
+# error/error.js #
 
 front-end error handling
 
 
-## sql/trait.php ##
-
-always returning sql instance having once been given config in 1st param.
-
-
-## user/trait.php ##
-
-Simple user system incl. trait function 'user'
 
 
 
-## Notes ##
+# sql/trait.php #
+
+always returning sql instance
+
+
+# user/trait.php #
+
+Simple user system incl. trait function 'user' & 'user_require'.
+
+
+
+
+
+
+# scripts/test.sh #
+
+Use `bash scripts/test.sh` or `npm test` to run testing scripts:
+
+1. [scripts/tests/php_tests.sh](scripts/tests/php_tests.sh)
+2. [scripts/tests/php_syntax.sh](scripts/tests/php_syntax.sh)
+
+
+
+## scripts/tests/php_tests.sh ##
+
+Runing php test scripts in dir 'tests'.
+
+If the script outputs "OK", the test is considered successfull
+
+See [scripts/tests/php_tests.sh](src/scripts/tests/php_tests.sh)
+
+
+
+## scripts/tests/php_syntax.sh ##
+
+Syntax checking .php files in dir 'src' (plugins excl.)
+
+See [scripts/tests/php_tests.sh](src/scripts/tests/php_syntax.sh)
+
+
+
+
+
+# scripts/build.sh #
+
+[...]
+
+
+
+
+
+# Notes #
 
 ...
 - pluralisation rules

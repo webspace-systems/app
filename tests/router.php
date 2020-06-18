@@ -22,4 +22,3 @@ foreach($in_out_expectations as $in=>$out_expected)
 	}
 }
 
-echo "OK";

@@ -6,23 +6,32 @@ normal=$(tput sgr0)
 
 test_script_file_names=(
 
-	"php_syntax"
-
 	"php_tests"
+
+	"php_syntax"
 )
 
 
-clear
+verbose=false
 
-printf "\n\n Running tests: \n\n"
+if [ "$1" == '-v' ]
+then
+	verbose=true
+fi
 
-c=0
-for test_file_name in "${test_script_file_names[@]}"
-do
-	((c=c+1)); printf "  ${c}. ${test_file_name} \n"
-done
 
-printf "\n\n\n\n\n"
+if [[ "$verbose" = true ]]
+then
+	printf "\nRunning tests: \n\n"
+
+	c=0
+	for test_file_name in "${test_script_file_names[@]}"
+	do
+		((c=c+1)); printf "  ${c}. ${test_file_name} \n"
+	done
+
+	printf "\n"
+fi
 
 
 c=0
@@ -30,13 +39,18 @@ for test_file_name in "${test_script_file_names[@]}"
 do
 	((c=c+1))
 
-	printf "${bold}${c}. ${test_file_name}${normal}\n\n"
+	printf "\n\n${bold}${c}. ${test_file_name}${normal}\n\n"
 
-	if (bash "scripts/tests/${test_file_name}.sh"  \ | grep '^OK: FOUND NO PROBLEMS' -v)
+	if [[ "$verbose" = true ]]
 	then
-		exit 1;
-	fi;
+		bash "scripts/tests/${test_file_name}.sh" -v || exit 1
+	else
+		bash "scripts/tests/${test_file_name}.sh" || exit 1
+	fi
 
-	printf "\n\n\n\n\n"
-
+	printf "\n\n"
 done
+
+printf "\n\n\e[32mAll tests completed. No errors found. ${normal}"
+
+printf "\n\n\n"
