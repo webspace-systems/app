@@ -11,19 +11,18 @@ verbose=false
 
 if [ "$1" == '-v' ]
 then
+	
 	verbose=true
+
+	printf "Looping php test scripts: tests/*.php... \n"
 fi
 
-
-printf "Looping php test scripts: tests/*.php... \n"
 
 if [ "$interprete_empty_response_as_success" = true ] && [ "$verbose" = true ]
 then
 	printf "\ninterprete_empty_response_as_success = true\n"
 fi
 
-
-# for filepath in tests/*.php; do
 
 for filepath in $(find tests -name '*.php')
 do
@@ -51,7 +50,7 @@ do
 
 				if [ "$verbose" = true ]
 				then
-		    		printf "\n\e[32m OK  ${normal} $filepath: \e[3m Empty response ${normal}"
+		    		printf "\n\e[32m OK  ${normal} $filepath"
 		    	else
 		    		printf "."
 		    	fi

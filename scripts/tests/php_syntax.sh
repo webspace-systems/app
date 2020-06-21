@@ -8,16 +8,14 @@ verbose=false
 
 if [ "$1" == '-v' ]
 then
+	
 	verbose=true
+
+	printf "Syntax checking .php & .phtml files in app/src (excl. plugins)... \n"
 fi
 
 
-printf "Syntax checking .php & .phtml files in app/src (excl. plugins)... \n"
-
-
-files=$( find src -type f \( -name "*.php" -or -name "*.phtml" \) -not -path "*/plugins/*" )
-
-for filepath in $files
+for filepath in $( find src \( -name "*.php" -or -name "*.phtml" \) -not -path "*/plugins/*" )
 do
 	result=$(php -l "$filepath")
 
@@ -32,6 +30,7 @@ do
 	    fi
 
     else
+
 		printf "\n\e[31m ERR ${normal} $filepath"
 
 		printf "\n\n\n\e[31m\e[3m${result}"
@@ -49,6 +48,7 @@ then
 else
 	printf "\n"
 fi
+
 
 printf "Done. No errors found."
 
