@@ -1,8 +1,9 @@
 {
 	"name": "app",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"scripts": {
 		"test": "bash scripts/test.sh -v",
+		"prepack": "bash scripts/build.sh -v",
 		"build": "bash scripts/build.sh -v"
 	},
 	"devDependencies": {

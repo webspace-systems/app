@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+    "settings":
+    {
+		"font_size": 15,
+		"ignored_packages":
+		[
+			"Vintage"
+		],
+		"tab_size": 3,
+		"word_wrap": false
+    }
+}

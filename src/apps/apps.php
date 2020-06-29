@@ -1,4 +1,4 @@
-<?php
+s<?php
 
 class apps extends app {
 

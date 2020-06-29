@@ -1,4 +1,5 @@
 
+# Index #
 
 
 - [__router.php__](#routerphp)
@@ -138,7 +139,7 @@ Runing php test scripts in dir 'tests'.
 
 If the script outputs "OK", the test is considered successfull
 
-See [scripts/tests/php_tests.sh](src/scripts/tests/php_tests.sh)
+See [scripts/tests/php_tests.sh](scripts/tests/php_tests.sh)
 
 
 
@@ -146,7 +147,7 @@ See [scripts/tests/php_tests.sh](src/scripts/tests/php_tests.sh)
 
 Syntax checking .php files in dir 'src' (plugins excl.)
 
-See [scripts/tests/php_tests.sh](src/scripts/tests/php_syntax.sh)
+See [scripts/tests/php_tests.sh](scripts/tests/php_syntax.sh)
 
 
 
@@ -160,9 +161,10 @@ See [scripts/tests/php_tests.sh](src/scripts/tests/php_syntax.sh)
 
 
 
+
+
 # Notes #
 
-...
 - pluralisation rules
 
 
