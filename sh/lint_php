@@ -1,0 +1,33 @@
+#!/bin/bash
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+italic="\033[3m"
+
+verbose=false
+
+if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
+then
+	
+	verbose=true
+
+	printf "PHP Lint .. \n"
+fi
+
+
+if ! [ -x "$(command -v phplint)" ]
+then
+	printf "\n\n${italic}sudo npm i -g phplint@7.3.1${normal} to continue\n\n\n"
+
+	sudo npm i -g phplint@7.3.1
+fi
+
+
+if [ "$verbose" = true ]
+then
+	phplint "src/**/*.php" '!*/plugins/**' # -s
+else
+	phplint "src/**/*.php" '!*/plugins/**' -s
+fi
+
+

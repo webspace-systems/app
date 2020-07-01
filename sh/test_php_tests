@@ -1,20 +1,19 @@
 #!/bin/bash
 
+interprete_empty_response_as_success=true
+
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-
-interprete_empty_response_as_success=true
-
-
 verbose=false
 
-if [ "$1" == '-v' ]
+if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
 	
 	verbose=true
 
-	printf "Looping php test scripts: tests/*.php... \n"
+	printf "PHP Tests .. \n"
+
 fi
 
 
@@ -80,4 +79,3 @@ else
 fi
 
 printf "Done. No errors found."
-

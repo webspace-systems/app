@@ -2,6 +2,8 @@
 
 class router {
 
+	static public $history = array();
+
 	static function route(string $pathname, array $base_paths = [ __DIR__ ] ) :? string {
 
 		$pathname = strtr(trim($pathname,'/'), ['//'=>'_','/'=>'_']);
@@ -25,8 +27,9 @@ class router {
 		{
 			foreach($base_paths as $base_path)
 			{
-				if(($path = $method(rtrim($base_path,'/'), $paths)) && $path != __DIR__.'/index.php')
+				if(( $path = $method ( rtrim($base_path,'/'), $paths)) && $path != __DIR__.'/index.php' )
 				{
+
 					$path = realpath($path);
 
 					if(!in_array($path, $exclude_files) && !in_array($path, $included_files))

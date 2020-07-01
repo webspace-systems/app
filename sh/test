@@ -1,0 +1,57 @@
+#!/bin/bash
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+
+test_script_file_names=(
+
+	"test_php_tests"
+
+	"test_php_syntax"
+
+)
+
+verbose=false
+
+if [ "$1" == '-v' ]
+then
+	verbose=true
+
+	clear
+fi
+
+if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
+then
+	printf "\nRunning scripts: \n\n"
+
+	c=0
+	for test_file_name in "${test_script_file_names[@]}"
+	do
+		((c=c+1)); printf "  ${c}. ${test_file_name} \n"
+	done
+
+	printf "\n"
+fi
+
+
+c=0
+for test_file_name in "${test_script_file_names[@]}"
+do
+	((c=c+1))
+
+	printf "\n\n${bold}${c}. ${test_file_name}${normal}\n\n"
+
+	if [[ "$verbose" = true ]]
+	then
+		bash "sh/${test_file_name}" -v || exit 1
+	else
+		bash "sh/${test_file_name}" || exit 1
+	fi
+
+	printf "\n\n"
+done
+
+printf "\n\n\e[32mAll tests completed. No errors found. ${normal}"
+
+printf "\n\n\n"

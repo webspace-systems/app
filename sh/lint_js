@@ -1,0 +1,29 @@
+#!/bin/bash
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+italic="\033[3m"
+
+verbose=false
+
+if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
+then
+	verbose=true
+
+	printf "JS Lint .. \n\n"
+fi
+
+if ! [ -x "$(command -v ./node_modules/.bin/eslint)" ]; then
+	
+	printf "${italic}npm install eslint to continue${normal}\n\n"
+	
+	npm install eslint
+
+fi
+
+
+
+# https://eslint.org/docs/user-guide/getting-started
+
+# ./node_modules/.bin/eslint "src/**/*.php" '!*/plugins/**' # -s
+

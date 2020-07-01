@@ -3,22 +3,24 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-
 test_script_file_names=(
 
-	# "php_lint"
+	"lint_js"
 
-	"php_tests"
+	"lint_php"
 
-	"php_syntax"
+	# "lint_php_tests"
+
+	# "test_php_syntax"
 )
-
 
 verbose=false
 
-if [ "$1" == '-v' ]
+if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
 	verbose=true
+
+	clear
 fi
 
 
@@ -41,18 +43,19 @@ for test_file_name in "${test_script_file_names[@]}"
 do
 	((c=c+1))
 
-	printf "\n\n${bold}${c}. ${test_file_name}${normal}\n\n"
-
 	if [[ "$verbose" = true ]]
 	then
-		bash "scripts/tests/${test_file_name}.sh" -v || exit 1
-	else
-		bash "scripts/tests/${test_file_name}.sh" || exit 1
-	fi
+		printf "\n\n${bold}${c}. ${test_file_name}${normal}\n\n"
 
-	printf "\n\n"
+		bash "sh/${test_file_name}" -v || exit 1
+
+		printf "\n\n"
+	else
+		bash "sh/${test_file_name}" || exit 1
+	fi
 done
 
-printf "\n\n\e[32mAll tests completed. No errors found. ${normal}"
-
-printf "\n\n\n"
+if [[ "$verbose" = true ]]
+then
+	printf "\n\n\e[32mAll tests completed. No errors found. ${normal}\n\n\n"
+fi

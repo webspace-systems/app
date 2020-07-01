@@ -3,15 +3,14 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-
 verbose=false
 
-if [ "$1" == '-v' ]
+if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
 	
 	verbose=true
 
-	printf "Syntax checking .php & .phtml files in app/src (excl. plugins)... \n"
+	printf "PHP Syntax Check .. \n"
 fi
 
 

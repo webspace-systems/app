@@ -22,11 +22,11 @@
 
 - [__user/trait.php__](#usertraitphp): login funct. with method 'user']
 
-- [__scripts/test.sh__](#scriptstestsh)
+- [__sh/test__](#scriptstestsh)
 
-- - [__scripts/tests/php_syntax.sh__](#scriptstestsphp_syntaxsh)
+- - [__sh/tests/php_syntax.sh__](#scriptstestsphp_syntaxsh)
 
-- - [__scripts/tests/php_tests.sh__](#scriptstestsphp_testssh)
+- - [__sh/tests/php_tests.sh__](#scriptstestsphp_testssh)
 
 - [__Notes__](#notes)
 
@@ -120,40 +120,43 @@ always returning sql instance
 Simple user system incl. trait function 'user' & 'user_require'.
 
 
+# sh/lint #
+
+$ `sh/lint`
 
 
 
+# sh/test #
 
-# scripts/test.sh #
+$ `sh/test`
 
-Use `bash scripts/test.sh` or `npm test` to run testing scripts:
+to
 
-1. [scripts/tests/php_tests.sh](scripts/tests/php_tests.sh)
-2. [scripts/tests/php_syntax.sh](scripts/tests/php_syntax.sh)
+1. [sh/tests/php_tests.sh](sh/tests/php_tests.sh)
+2. [sh/tests/php_syntax.sh](sh/tests/php_syntax.sh)
 
 
-
-## scripts/tests/php_tests.sh ##
+## sh/tests/php_tests.sh ##
 
 Runing php test scripts in dir 'tests'.
 
 If the script outputs "OK", the test is considered successfull
 
-See [scripts/tests/php_tests.sh](scripts/tests/php_tests.sh)
+See [sh/tests/php_tests.sh](sh/tests/php_tests.sh)
 
 
 
-## scripts/tests/php_syntax.sh ##
+## sh/tests/php_syntax.sh ##
 
 Syntax checking .php files in dir 'src' (plugins excl.)
 
-See [scripts/tests/php_tests.sh](scripts/tests/php_syntax.sh)
+See [sh/tests/php_tests.sh](sh/tests/php_syntax.sh)
 
 
 
 
 
-# scripts/build.sh #
+# sh/build #
 
 [...]
 
