@@ -12,7 +12,7 @@ config::set([
 
 	'route_root_paths' => [ __DIR__ ],
 
-	'frontpage_component' => 'user/login',
+	// 'frontpage_component' => 'user/login',
 
 	'user_login' => [
 		'redirect_to' => 'dashboard'

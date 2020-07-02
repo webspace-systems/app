@@ -35,7 +35,9 @@ if(class_exists($route))
 	{
 		if(method_exists($ci, $m))
 		{
-			exit(call_user_func([$ci, $m]));
+			$resp = call_user_func([$ci, $m]);
+
+			exit;
 		}
 	}
 
