@@ -11,7 +11,6 @@ exec_scripts=(
 	"aux_php_scripts/format_src.php"
 
 
-
 )
 
 
@@ -20,28 +19,38 @@ SUCCESS_TOKEN="OK_ALL_GOOD"
 ALT_SUCCESS_TOKEN="OK: FOUND NO ERRORS"
 
 
-
-
-
 c=0; for script_file_path in "${exec_scripts[@]}"; do
 
 	((c=c+1))
 
-	printf "\n"
-
-	result=$(php -f "$script_file_path")
-
-	if( [[ $result == *"Could not open input file"* ]] )
+	if ! ( test -f "$script_file_path" )
 	then
 		script_file_path="sh/$script_file_path"
+	fi
+
+	printf "\n"
+
+
+	if ( [ "$1" == '-e' ] )
+	then
+		
+		printf "Confirmed: \n"
+
+		result=$(php -f "$script_file_path" e)
+
+	else
+
 		result=$(php -f "$script_file_path")
-	fi;
+	
+	fi
 
 
 	if ( [[ "$result" == *"$SUCCESS_TOKEN"* ]] || [[ "$result" == *"$ALT_SUCCESS_TOKEN"* ]] )
 	then
+
 	    	printf "\n\e[32m OK  ${normal} $script_file_path"
-    else
+
+   else
 
     	if [ -z "$result" ] # is empty
     	then
@@ -63,10 +72,13 @@ c=0; for script_file_path in "${exec_scripts[@]}"; do
     		printf "\n\n\n"
     		exit 1
     	fi
-    fi
+   
+   fi
 
 done
+
 
 printf "\n\n\n\e[32mAll tasks completed. ${normal}"
 
 printf "\n\n\n"
+

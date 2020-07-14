@@ -1,37 +1,28 @@
 <?php
 
-
-// Ajour this var if file is moved or it's parent dir. "sh" is renamed:
-
-$src_dir = substr(__DIR__,0,strpos(__DIR__,'/sh/')) . '/src';
+$SRC_DIR = substr(__DIR__,0,strpos(__DIR__,'/sh/')) . '/src';
 
 $SUCCESS_TOKEN = 'OK_ALL_GOOD';
 
+$EXEC_FORMAT_FIX = ( in_array( 'e', $argv ) || $_REQUEST['e'] ) ? true : false;
 
-
-// Idea: Automated fixing of formatting details in source files
-
-
-
-$rules =
+$RULES =
 [
 
 	'scope_start_line_break' =>	// Ensure  {  is only char in line
 	[
 		'in'	=>	[	'php',	'js'	],
 
-		'test'	=>	function ( string $line ) : bool {		return strpos( $line, '{' );		},
+		'test'	=>	function ( string $line, array $ctx ) : bool {		return strpos( $line, '{' );		},
 	
 		//'test' => ' strpos( $line, "{" ) ',
 	
-		'format'	=>	function (	string $line,	array $ctx,	array & $notes = []	)	:	bool	{
+		'format'	=>	function (	string $line,	array $ctx	)	:	string	{
 
-			if ( $ctx['line_length'] > 50 )
+			if ( $ctx['line_len'] > 50 )
 			{
-				$line = strtr($line, [ "{" => "\n" . $ctx['indentation'] . "{" ]);
+				return strtr( $line, [  "{"  =>  "\n" . $ctx['line_indent'] . "{" ]);
 			}
-
-			return $line;
 		}
 	],
 
@@ -40,16 +31,14 @@ $rules =
 	[
 		'in'	=>	[	'php',	'js'	],
 
-		'test'	=>	function ( string $line ) : bool {		return strpos( $line, '}' );		},
+		'test'	=>	function ( string $line, array $ctx ) : bool {		return strpos( $line, '}' );		},
 	
-		'format'	=>	function (	string $line,	array $ctx,	array & $notes = []	)	:	bool	{
+		'format'	=>	function (	string $line,	array $ctx	)	:	string	{
 
-			if ( $ctx['line_length'] > 50 )
+			if ( $ctx['line_len'] > 50 )
 			{
-				$line = strtr($line, [ "{" => "\n" . $ctx['indentation'] . "{" ]);
+				return strtr( $line, [  "{"  =>  "\n" . $ctx['line_indent'] . "}" ]);
 			}
-
-			return $line;
 		}
 	],
 
@@ -57,73 +46,84 @@ $rules =
 	'notice_use_of_php_const_boolean' =>  // Note if word 'boolean' is seen in a php script
 	[
 		'in' => [ 'php' ],
-		'test' => function ( string $line ) : bool {		return strpos ( $line, 'boolean' );		},
+		'test' => function ( string $line, array $ctx ) : bool {		return strpos ( $line, 'boolean' );		},
 		'notice' => "Use of PHP constant 'boolean' is often mistaken for 'bool'"
 	],
 
 ];
 
 
-$search_types_in_filename_extensions =
-[
-	'.php' => [ 'php', 'html', 'js' ],
-	'.phtml' =>  [ 'php', 'html', 'js' ],
-	'.js' =>  [ 'php', 'html', 'js' ]
-];
-
-
-
 $result = 
-(
-	$funct_format_src = function ( string $path ) use ( $rules, $search_types_in_filename_extensions ) {
 
-		$rules_in = array_unique(array_reduce($rules,function($c,$i){return array_merge($c, $i['in']);},[]));
+ (
 
-		$result = 
-		[
-			'files_succeeded' => [],
-			'files_failed' => [],
-			'notes' => []
-		];
+	$funct_format_src = function ( string $path, array & $rules, bool $exec = false ) {
 
-		foreach ( ( $files = scandir( $path ) )  as  $filename )
-		{
-			if (( $_last_dot_pos = strrpos( $filename, "."))  >  0
+		$rules_in = array_unique(array_reduce($RULES,function($c,$i){return array_merge($c, $i['in']);},[]));
+
+		$all_good = [];
+		
+		$formatting_proposition = [];
+		
+		$notes = [];
+
+		
+		foreach (  scandir( $path )  as  $file_name  ):
+
+			if (( $_last_dot_pos = strrpos( $file_name, "."))  >  0
 			    &&
-			    ( $type = substr($filename, $_last_dot_pos+1) )
+			    ( $type = substr($file_name, $_last_dot_pos+1) )
 				 &&
 			      in_array( $type, $rules_in )
-			)
-			{
-				$file_content = file_get_contents( rtrim($path,'/') . '/' . $filename );
+			):
 
-				$lines_of_file = explode("\n", $file_content);
+				$file_all_good = true;
 
-				$tokens_in_lines = array_fill_keys ( array_keys($lines_of_file), array() );
+				$to_format = [];
+
+				$did_format = [];
+
+
+				$file_path = rtrim($path,'/') . '/' . $file_name;
+
+				$file_content = file_get_contents( $file_path );
+
+				$file_lines = explode("\n", $file_content);
+
+
+				$tokens_in_lines = array_fill_keys ( array_keys($file_lines), array() );
 
 				foreach( token_get_all($file_content) as list( $token, $text, $line_num ) ) if ( $token )
 				{
 					array_push($tokens_in_lines[$line_num], $token);
 				}
-				// $line_tokens = array_reduce($file_tokens, function($c,$i){ exit(print_r([$c,$i])); return [ '' ]; }, [])
+
 
 				$new_file_content_lines = [];
 
 				$line_type = $type;
 
-				foreach ( $lines_of_file as $line_num => $line )
-				{
-					foreach ( $rules as $rule_name => $rule )
-					{
+
+				foreach ( $file_lines  as  $line_num  =>  $line  ):
+
+
+					$line_len = strlen( $line );
+
+
+					foreach (  $RULES  as  $rule_name  =>  $rule ):
+
+
 						$ctx = 
 						[
 							'line_num' => $line_num,
-							'line_length' => strlen($line),
+							'line_len' => $line_len,
 							'line_php_tokens' => $php_tokens_in_line[$line_num] ?? [],
 							'line_prev' => $line[$line_num-1] ?? '',
 							'line_next' => $line[$line_num+1] ?? '',
 							'line_type' => $line_type,
+							'line_indent' => substr($line, 0, $line_len-strlen(ltrim($line)))
 						];
+
 
 
 						if(($_php_open_tag_at = array_search( T_OPEN_TAG, $ctx['line_php_tokens'] ) ) )
@@ -132,82 +132,114 @@ $result =
 
 							if ( $_php_open_tag_at !== 0 )
 							{
-								$result['notes'][] = ['T_OPEN_TAG not 1st token in line',$ctx];
+								$notes[] = ['T_OPEN_TAG not 1st token in line',$ctx];
 							}
 						}
 
 
-						$cond_funct = is_string($rule['test']) ? eval($rule['test']) : $rule['test'];
 
-						if (  $cond_funct ( $line )  ===  true  )
-						{
+						$test = is_string($rule['test'])  ?  eval ( $rule['test'] )  :  $rule['test'] ( $line, $ctx );
 
 
-							$indent_length = $ctx['line_length'] - strlen(ltrim($line));
-
-							$indentation = str_split(substr($line, 0, $indent_length));
-
-							print_r(['$indentation'=>$indentation,'$line'=>$line,'$ctx'=>$ctx]);
-							exit;
-
-							$indent_tabs = strlen($_lts=ltrim($line,' ')) - strlen( ltrim ( $_lts, '	' ) );
-							$indent_spaces = strlen($_ltt=ltrim($line,'	')) - strlen( ltrim ( $_ltt, ' ' ) );
-
-							$indent = substr($line, 0, $indent_length);
+						if ( $test === true ):
 
 
-							$ctx['indent'] = substr($line, 0, $indent_length);
-							$ctx['indent_length'] = $indent_length;
-							$ctx['indent_length'] = $indent_length;
-
-							print_r($ctx);
-							exit("\n\n\n\nSICK\n\n\n\n\n\n\n\n");
-
-
-							if ( isset ( $rule['notice'] ) )
-							{
-								$notes = is_function($rule['notice']) ? $rule['notice']( $line, $ctx, $result['notes'] ) : $rule['notice'];
-
-								foreach( is_array($notes) ? $notes : []  as  $k => $v  )
-								{
-
-									if ( stripos($line, 'notice:') === false )
-									{
-										$line = 'Notice: ' . $line;
-									}	
-								}
-							}
-
-							if ( is_function ( $rule['format'] ) )
-							{
-								$line = $rule['format']( $line, $ctx );									
-							}
+							if ( isset ( $rule['notice'] ) && ( $_notice_how = gettype($rule['notice']) )
+								  &&
+									! (
+										 in_array( $_notice_how, [ 'function', 'object'] )
+									  &&
+										  array_push( $notes, [  $rule['notice']( $line, $ctx ),  $ctx ])
+									)
+								  &&
+									! (
+										  in_array( $_notice_how, [ 'string', 'array' ] )
+										&&
+										   array_push( $notes, [  $rule['notice'],  $ctx ])
+									)
+							)
+								array_push( $notes, [ 'Unexpected type of $rule["notice"]: "'.$_notice_how.'"', $ctx ]);
 
 
-							print("\n\n\n\n\n\n['$line']  $indent_spaces vs tabs: $indent_tabs \n".print_r($indentation,true));
+
+							if ( in_array( gettype($rule['format']), ['function','object'] )
+								&&
+								 ( $_line_formatted = $rule['format']( $line, $ctx ) )
+								&&
+									! empty ( $_line_formatted )
+								&&
+									$_line_formatted !== $line
+							):
+
+								$file_all_good = false;
+
+								$format = 
+								[
+									$file_path . ':' . $line_num,
+									$rule_name,
+									strtr( $line, "\n", '\\'.' n'),
+									...explode( "\n", $_line_formatted )
+								];
+
+								if ( $exec ):
+
+									$line = (array) $_line_formatted;
+
+									$did_format[] = $format;
+
+								else:
+
+									$formatting_proposition[] = $format;
+
+								endif;
+
 							
-							exit("\n\n\n\n\n\n - $rule_name - --;");
+							endif; // $_line_formatted
+						
 
-						}
+						endif; // $test === true
+
 
 						$new_file_content_lines[] = $line;
-					}
-				}
-			}
-		}
 
-		return $result;
+
+						if ( $exec ):
+
+
+							// Save proposed..?
+						
+						endif; // $exec
+
+
+					endforeach; // $rule_name => $rule
+
+				endforeach; // $line_num => $line
+
+
+				if ( $file_all_good ):
+
+
+					$all_good[] = $file_path;
+
+				
+				endif;
+
+			endif; // valid file ext or found type
+
+		endforeach; // scandir( $path )  as  $file_name 
+
+
+		return compact ( 'all_good', 'formatting_proposition', 'notes' );
 	}
-)
-( $src_dir );
+ )
+ ( $SRC_DIR, $RULES, $EXEC_FORMAT_FIX )
+;
 
 
-if ( ! empty ( $result['failed'] ) )
-
-	die ( print_r ( $result, true ) );
-
-else
+if ( empty ( $result['formatting_proposition'] ) )
 
 	echo $SUCCESS_TOKEN;
 
+else
 
+	die ( print_r ( [ 'formatting_proposed' => current($result['formatting_proposition']) ], true ) );
