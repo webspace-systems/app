@@ -2,8 +2,8 @@
 
 class public_index extends app {
 
-	function GET(){
+	function GET ( $params = [] ) {
 
-		exit('Hello world!');
+		return $this->docf ( 'index.phtml' );
 	}
 }

@@ -1,16 +1,49 @@
 {
 	"name": "app",
 	"version": "0.1.0",
+
 	"scripts": {
 		"test": "bash sh/test.sh -v",
 		"prepack": "bash sh/build.sh -v",
 		"build": "bash sh/build.sh -v"
 	},
+
 	"devDependencies": {
 		"babel-cli": "^6.0.0",
-		"eslint": "^7.3.1"
-	},
-	"dependencies": {
+		"babel-preset-es2015": "^6.24.1",
+		"eslint": "^7.4.0",
 		"phplint": "^2.0.1"
+	},
+
+	"babel": {
+		"presets": [
+			"es2015"
+		],
+		"plugins": []
+	},
+
+	"eslintConfig": {
+		"env": {
+			"browser": true,
+			"es6": true
+		},
+		"extends": "eslint:recommended",
+		"parserOptions": {
+			"ecmaVersion": 2018
+		},
+		"rules": {
+			"indent": [
+				"error",
+				"tab"
+			],
+			"no-unused-vars": [
+				"error",
+				{
+					"vars": "local"
+				}
+			],
+			"no-mixed-spaces-and-tabs": [
+			]
+		}
 	}
 }

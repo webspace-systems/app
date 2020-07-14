@@ -2,30 +2,40 @@
 
 class model {
 
-	protected function get( string $key, bool $or_error = true, bool $and_die = false ) {
+
+	//protected function ___get ( string $key, $required = true ) {
+	protected function get ( ...$args ) {
+
+		$required = is_bool( end($args) ) ? array_pop($args) : false;
+
+		$key = count($args) == 1 ? $args[0] : $args;
+
 
 		if( ! $key )
 		{
 			return get_object_vars($this);
 		}
 
-		else if( property_exists($this, $key) )
+		else if( is_string($key) && property_exists($this, $key) )
 		{
 			return $this->$key;
 		}
-		
-		else if( !is_null( $_val = $this->resolve_by_key_paths(explode('.',$key)) ) )
+
+		else if( is_array($key) )
 		{
-			return $_val;
+			return $this->resolve_by_key_paths($key);
 		}
 		
-		else if( $or_error )
+		else if( $required )
 		{
-			trigger_error("Key not found: '$key'", $and_die ? E_USER_ERROR : E_USER_WARNING);
+			trigger_error("Unable to get of object '".get_class($this)."' by key: '".$key."'", E_USER_ERROR);
 		}
+
+		return null;
 	}
 
-	protected function set( $key, $val = null ) : bool {
+
+	protected function set ( $key, $val = null ) : bool {
 
 		if(is_array($key))
 		{
@@ -63,11 +73,11 @@ class model {
 
 
 
-	function resolve_by_key_paths( array $key_paths ) {
+	function resolve_by_key_paths ( array $key_paths ) {
 
 		$val = null;
 
-		if(property_exists($this, $key_paths[0]))
+		if ( property_exists($this, $key_paths[0]) )
 		{
 			$_val = $this->{$key_paths[0]};
 

@@ -4,8 +4,7 @@ class app {
 
 	use _error;
 	use _sql;
-	use _template_002;
-
+	use _template_003;
 
 	static function get_url( $incl_path = false, $incl_qs = false ) : string {
 
@@ -38,10 +37,16 @@ class app {
 		return $url;
 	}
 
+
 	
+	/* function get_request () : array
+	 * - alias: request
+	 * - alias: getRequest
+   */
+
 	private $_request_data = null;
 
-	function get_request() : array {
+	function get_request ( ) : array {
 
 		if(empty($this->_request_data))
 		{
@@ -59,11 +64,23 @@ class app {
 
 		return $this->_request_data;
 	}
+
+	function request (...$args) : array { return call_user_func_array([$this, 'get_request'], $args); }
+	function getRequest (...$args) : array { return call_user_func_array([$this, 'get_request'], $args); }
+	
+
+	function requested ( string $get_certain_key = null ) {
+
+		$request = $this->get_request();
+
+		return $this->get_request()[ $get_certain_key ] ?? null;
+	}
+
 	
 	
 	private $_request_headers = null;
 
-	function get_request_headers() : array {
+	function get_request_headers () : array {
 
 		if(empty($this->_request_headers))
 		{
@@ -174,7 +191,7 @@ class app {
 		http_response_code($http_code);
 
 
-		echo $output_data;
+		print $output_data;
 	}
 
 
@@ -197,7 +214,7 @@ class app {
 		$response = $content_type == 'application/json' ? json_encode($data) : $data;
 
 
-		echo is_array($response) ? print_r($response,true) : $response;
+		print is_array($response) ? print_r($response,true) : $response;
 	}
 
 

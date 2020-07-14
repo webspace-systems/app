@@ -1,4 +1,10 @@
 <?php
 
+require_once 'tests.php';
 
-echo "OK: FOUND NO ERRORS";
+new test([],['asd','asdas']);
+
+
+exit();
+
+print "OK: FOUND NO ERRORS";

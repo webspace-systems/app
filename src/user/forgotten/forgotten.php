@@ -49,12 +49,12 @@ class user_forgotten extends app {
 
 		        mail(
 		        	$user['email'],
-		        	'Password reset request - '.config::get('platform_name'),
+		        	'Password reset request - '.config::get('template', 'title'),
 		        	$mail_contents,
 		        	'MIME-Version: 1.0' . "\r\n"
 		        	.'Content-type: text/html; charset=iso-UTF-8'."\r\n"
 		        	.'To: '.$user['name'].' <'.$user['email'].'>' . "\r\n"
-		        	.'From: Customer Service - '.config::get('platform_name').' <noreply@'.$_SERVER['HTTP_HOST'].'>'."\r\n"
+		        	.'From: Customer Service - '.config::get('template', 'title').' <noreply@'.$_SERVER['HTTP_HOST'].'>'."\r\n"
 		        )
 		        or die('Unable to send mail');
 			}

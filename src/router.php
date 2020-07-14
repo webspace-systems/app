@@ -4,146 +4,111 @@ include_once 'error/trait.php';
 
 class router {
 
-	static public $accept_as_response = [ 'class'=> 1, 'trait'=> 1, 'interface'=> 1 ];
+	static public array $base_paths;
 
-	static public $test_mode = true;
+	static public bool  $debug_mode = true;
 
-	static function get_existing_by_name_per_type ( string $name ) : array {
+	static public array $accept_as_response = [ 'class'=> 1, 'trait'=> 1, 'interface'=> 1 ];
 
-		$exist_type_names = [ $name => [] ];
+	static public array $count_loops_per_request = [ ];
 
-		foreach(static::$accept_as_response as $type => $do)
+	// To-do:
+	// static public array $indexed_paths_to_names_of_types = [ ];
+
+	static public string $debug_path = 'singleton';
+	static public int $debug_skip_occourences = 1;
+
+	static public int $count_requests = 0;
+
+	static function route ( string $pathname ) :? string {
+
+		static::$count_requests = static::$count_requests+1;
+
+		if(static::$debug_path == $pathname && static::$debug_skip_occourences)
 		{
-			if(call_user_func($type.'_exists', $name, 0))
-			{
-				array_push($exist_type_names[$name], $type);
-			}
+			static::$debug_skip_occourences--;
 		}
 
-		return $exist_type_names;
-	}
-
-	static function route(string $pathname, array $base_paths = [ __DIR__ ] ) :? string {
 
 		$pathname = strtr( trim($pathname,'/'),  ['//'=>'_', '/'=>'_'] );
 		
 		$paths = static::resolve_paths($pathname); // alt: preg_split('/[_,\/]+/', trim($pathname,'/'));
 
-		$exclude_paths = [
-			__DIR__,
-			__DIR__.'/entry.php',
-			__DIR__.'/index.php'
-		];
 
-		$included_files = null;
+		$included_files = get_included_files();
 
-		$search_types = array_keys(array_filter(static::$accept_as_response));
+		$exclude_files = [ __DIR__."/entry.php" ];
 
-		$search_names = [ $pathname, 'Tester2' ];
 
-		$exist_type_names = static::get_existing_by_name_per_type( $pathname );
+		$search_types = array_keys( array_filter( static::$accept_as_response ) );
 
-		$found_name = null;
+		$search_names = [ $pathname ];
 
-		$found_names = [];
 
-		foreach(static::search_methods() as $mn=>$search_m)
+		$count_loops = 0;
+
+		foreach ( static::search_methods() as $n => $sm )
 		{
-			foreach($base_paths as $base_path)
+
+			foreach ( static::$base_paths ?? [ __DIR__ ] as $base_path )
 			{
-				if( ( $find = $search_m ($pathname, rtrim($base_path,'/'), $paths) ) )
+
+				if (  ( $sm_suggested = $sm ( $pathname, rtrim($base_path,'/'), $paths ) )
+				   && ( $fp = realpath(  $sm_suggested[0] ?? $sm_suggested['filepath'] ?? $sm_suggested['fp']  ) )
+				   && !in_array($fp, $exclude_files )
+				   && !in_array($fp, $included_files )
+				)
 				{
-					$sm_proposed_name = ( $_1 = ($find[1] ?? $find['name']) ) != $pathname ? $_1 : null;
-					$sm_proposed_type = ( $_1 = ($find[2] ?? $find['type']) ) != $type ? $_1 : null;
-					$sm_found_filepath = realpath( is_string($find) ? $find : ( $find[0] ?? $find['path'] ) );
+					include_once $fp;
+					
+					$included_files[] = $fp;
 
-
-					if( in_array( $sm_found_filepath, $exclude_paths )
-						 or
-						 in_array( $sm_found_filepath, $included_files ?? ( $included_files = get_included_files() ) )
+					if ( ( $sm_suggested_name = $sm_suggested[1] ?? null )
+					     && $sm_suggested_name != $pathname
+					     &&
+					     ! (
+					        ( $p_n_idx = array_search($sm_suggested_name, $search_names) ) !== false
+					        && !empty( ( $search_names = array_splice($search_names, 0, 0, array_splice($search_names, $p_n_idx, 1)) ) )
+					     )
 					)
-						continue;
+						array_unshift($search_names, $sm_suggested_name);
 
 
-					if($sm_proposed_name) // Prioritize proposed
+					if( ( $sug_type = $sm_suggested[2] ?? null )
+					   && $sug_type != $pathname
+					   &&
+					   ! (
+					       ( $p_n_idx = array_search($sug_type, $search_types) ) !== false
+					    && ( $search_types = array_splice($search_types, 0, 0, array_splice($search_types, $p_n_idx, 1)) )
+					   )
+					)
+						array_unshift($search_types, $sug_type);
+
+
+					foreach ( $search_names as $name )
 					{
-						if( ( $p_n_idx = array_search($sm_proposed_name, $search_names) ) !== false )
+
+						foreach ( $search_types as $type ) 
 						{
-							unset($search_names[$p_n_idx]);
+							
+							$count_loops++;
 
-							exit('r');
-
-							$out = array_splice($array, $a, 1);
-							array_splice($array, $b, 0, $out);
-						}
-
-						array_unshift($search_names, $sm_proposed_name);
-					}
-
-					if( $sm_proposed_type ) // Prioritize proposed
-					{
-						if( ( $p_t_idx = array_search($sm_proposed_type, $search_types) ) !== false )
-						{
-							unset($search_types[$p_t_idx]);
-						}
-
-						array_unshift($search_types, $sm_proposed_type);
-					}
-
-
-					try
-					{
-						ob_start();
-
-						include_once ( $sm_found_filepath );
-
-						$incl_output = ob_get_clean();
-						
-						$included_files[] = $sm_found_filepath;
-
-
-						$combos = [];
-
-						foreach($search_names as $pni => $name)
-						{
-							foreach($search_types as $type)
+							if( ( $type == 'function' && call_user_func_array( $type.'_exists', [ $name, false ] ) )
+								||
+									call_user_func_array( $type.'_exists', [ $name, false ] )
+							)
 							{
-								$combos[] = [$name, $type];
+								static::$count_loops_per_request[] = [ $pathname, $count_loops, $name, $type ];
+
+								return $name;
 							}
 						}
-
-						foreach($combos as list($name, $type))
-						{
-							if(!in_array($type, $exist_type_names[$name]??[]) && call_user_func($type.'_exists', $name, 0))
-							{
-								$found_name = 
-								$found_names[] = $name;
-								$exist_type_names[$name][] = $type;
-
-								if(!static::$test_mode)
-								{
-									break;
-								}
-							}
-						}
-
-						if($found_name && !static::$test_mode)
-						{
-							break;
-						}
-					}
-					catch(Exception $e)
-					{
-						trigger_error('Failing attempt to include $sm_found_filepath: '.$sm_found_filepath, E_USER_NOTICE);
-						continue;
 					}
 				}
 			}
-
-			if($found_name && !static::$test_mode) break;
 		}
 
-		return $found_name ?? $incl_output ?? null;
+		return null;
 	}
 
 
@@ -164,10 +129,18 @@ class router {
 	}
 
 
+	static function route_debug ( string $path ) {
+
+		static::$debug_path = $path;
+
+		$result = static::route( $path );
+	}
+
+
 	static function search_methods() : array {
 
-		return [
-
+		return
+		[
 			'exact.php' => function(string $pathname, string $base_path, array $paths) :? array {
 
 				$test_path = $base_path.'/'.implode('/',$paths) . '.php';
@@ -235,8 +208,7 @@ class router {
 
 				return file_exists($test_path) ? [ $test_path, $pathname ] : null;
 			},
+
 		];
 	}
-
 }
-

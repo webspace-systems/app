@@ -1,0 +1,27 @@
+
+html {
+
+
+}
+
+
+	body {
+
+
+	}
+
+
+		#body_inner_wrapper {
+
+			background-color: red;
+
+		}
+
+
+	
+	body.loading
+
+		#body_inner_wrapper {
+
+			opacity: 0;
+		}

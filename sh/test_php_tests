@@ -5,7 +5,7 @@ interprete_empty_response_as_success=true
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-verbose=false
+verbose=true
 
 if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then

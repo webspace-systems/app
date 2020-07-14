@@ -4,7 +4,7 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 italic="\033[3m"
 
-verbose=false
+verbose=true
 
 if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
@@ -17,9 +17,9 @@ fi
 
 if ! [ -x "$(command -v phplint)" ]
 then
-	printf "\n\n${italic}sudo npm i -g phplint@7.3.1${normal} to continue\n\n\n"
+	printf "\n\n${italic}sudo npm i -g phplint${normal} to continue\n\n\n"
 
-	sudo npm i -g phplint@7.3.1
+	sudo npm i -g phplint
 fi
 
 

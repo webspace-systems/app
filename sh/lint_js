@@ -4,7 +4,7 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 italic="\033[3m"
 
-verbose=false
+verbose=true
 
 if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
@@ -25,5 +25,5 @@ fi
 
 # https://eslint.org/docs/user-guide/getting-started
 
-# ./node_modules/.bin/eslint "src/**/*.php" '!*/plugins/**' # -s
+ ./node_modules/.bin/eslint "src/**/*.php" '!*/plugins/**' # -s
 

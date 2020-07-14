@@ -1,0 +1,72 @@
+#!/bin/bash
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+
+exec_scripts=(
+
+	"aux_php_scripts/format_package.json.php"
+
+	"aux_php_scripts/format_src.php"
+
+
+
+)
+
+
+SUCCESS_TOKEN="OK_ALL_GOOD"
+
+ALT_SUCCESS_TOKEN="OK: FOUND NO ERRORS"
+
+
+
+
+
+c=0; for script_file_path in "${exec_scripts[@]}"; do
+
+	((c=c+1))
+
+	printf "\n"
+
+	result=$(php -f "$script_file_path")
+
+	if( [[ $result == *"Could not open input file"* ]] )
+	then
+		script_file_path="sh/$script_file_path"
+		result=$(php -f "$script_file_path")
+	fi;
+
+
+	if ( [[ "$result" == *"$SUCCESS_TOKEN"* ]] || [[ "$result" == *"$ALT_SUCCESS_TOKEN"* ]] )
+	then
+	    	printf "\n\e[32m OK  ${normal} $script_file_path"
+    else
+
+    	if [ -z "$result" ] # is empty
+    	then
+
+			if [ "$interprete_empty_response_as_success" = true ]
+			then
+
+	    		printf "\n\e[32m OK  ${normal} $script_file_path"
+
+	    	else
+	    		printf "\n\e[31m ERR ${normal} $script_file_path: \e[31m Empty response ${normal}"
+				printf "\n\n\n"
+				exit 1
+			fi
+
+		else
+
+    		printf "\n\e[31m ERR ${normal} $script_file_path: \e[31m ${result} ${normal}"
+    		printf "\n\n\n"
+    		exit 1
+    	fi
+    fi
+
+done
+
+printf "\n\n\n\e[32mAll tasks completed. ${normal}"
+
+printf "\n\n\n"

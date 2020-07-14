@@ -1,5 +1,5 @@
 <?php
 
 
-echo "OK";
+print "OK";
 

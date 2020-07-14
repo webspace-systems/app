@@ -83,12 +83,12 @@ class user_signup extends app {
         	'MIME-Version: 1.0' . "\r\n"
         	.'Content-type: text/html; charset=iso-UTF-8'."\r\n"
         	.'To: '.$params['name'].' <'.$params['email'].'>' . "\r\n"
-        	.'From: Customer Service - '.config::get('platform_name').' <noreply@'.$_SERVER['HTTP_HOST'].'>'."\r\n"
+        	.'From: Customer Service - '.config::get('template', 'title').' <noreply@'.$_SERVER['HTTP_HOST'].'>'."\r\n"
         )
         or die('Unable to send mail');
 
 
-		header('location: '.config::get('url').'/user/login?msg=Welcome to '.config::get('platform_name').'! Please click the link in the mail you\'be been sent, to confirm and activate your account.');
+		header('location: '.config::get('url').'/user/login?msg=Welcome to '.config::get('template', 'title').'! Please click the link in the mail you\'be been sent, to confirm and activate your account.');
 	}
 
 }

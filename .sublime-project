@@ -3,10 +3,13 @@
 	[
 		{
 			"path": "."
+		},
+		{
+			"path": "/Users/theispedersen/Projects"
 		}
 	],
-    "settings":
-    {
+	"settings":
+	{
 		"font_size": 15,
 		"ignored_packages":
 		[
@@ -14,5 +17,5 @@
 		],
 		"tab_size": 3,
 		"word_wrap": false
-    }
+	}
 }

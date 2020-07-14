@@ -1,0 +1,3 @@
+[submodule "asset_load_controller"]
+	path = src/plugins/asset_load_controller
+	url = https://github.com/theiscnp/asset_load_controller

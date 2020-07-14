@@ -3,7 +3,7 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-verbose=false
+verbose=true
 
 
 babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose

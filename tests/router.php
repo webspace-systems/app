@@ -1,24 +1,24 @@
 <?php
 
-include_once __DIR__.'/../src/router.php';
+require 'tests.php';
 
-spl_autoload_register(['router','route']);
-
-$in_out_expectations = [
-
-	'' => null,
-	'.' => null,
-	'index' => null,
-	'router' => null,
-	'sql' => null,
-	'_sql' => '_sql'
-];
-
-foreach($in_out_expectations as $in=>$out_expected)
-{
-	if( router::route($in) != $out_expected )
-	{
-		exit('Failed at "'.$in.'"');
-	}
-}
+new test (
+	[
+		'type' => 'method',
+		'file' => 'router.php',
+		'function' => 'router::route'
+	],
+	[
+		[ 'parameters' => [''], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['.'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['index'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['router'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['router.php'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['config'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['config.php'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['sql'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['sql.php'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['_sql'], 'correct_return_type' => 'string', 'must_result' => '_sql'  ]
+	]
+);
 

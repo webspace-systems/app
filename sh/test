@@ -4,15 +4,14 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 
-test_script_file_names=(
+test_scripts=(
 
 	"test_php_tests"
 
 	"test_php_syntax"
-
 )
 
-verbose=false
+verbose=true
 
 if [ "$1" == '-v' ]
 then
@@ -26,7 +25,7 @@ then
 	printf "\nRunning scripts: \n\n"
 
 	c=0
-	for test_file_name in "${test_script_file_names[@]}"
+	for test_file_name in "${test_scripts[@]}"
 	do
 		((c=c+1)); printf "  ${c}. ${test_file_name} \n"
 	done
@@ -36,7 +35,7 @@ fi
 
 
 c=0
-for test_file_name in "${test_script_file_names[@]}"
+for test_file_name in "${test_scripts[@]}"
 do
 	((c=c+1))
 

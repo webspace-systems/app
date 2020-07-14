@@ -22,6 +22,8 @@
 
 - [__user/trait.php__](#usertraitphp): login funct. with method 'user']
 
+- [__sh__](#sh) Bash scripts
+
 - [__sh/test__](#scriptstestsh)
 
 - - [__sh/tests/php_syntax.sh__](#scriptstestsphp_syntaxsh)
@@ -120,15 +122,37 @@ always returning sql instance
 Simple user system incl. trait function 'user' & 'user_require'.
 
 
-# sh/lint #
-
-$ `sh/lint`
 
 
 
-# sh/test #
+# sh #
 
-$ `sh/test`
+Scripts for misc. automatization of special tasks like testing & compiling
+Fx. maybe we can also make JS unit tests using Babel...?!
+`node ./node_modules/babel-cli/bin/babel-node.js tests/error/trait.js`
+
+
+- [__sh/lint__](#sh_lint)
+- [__sh/test__](#sh_test)
+- [__sh/test_php_tests__](#sh_test_php_tests)
+- [__sh/test_php_syntax__](#sh_test_php_syntax)
+
+
+
+
+If you get: `-bash: sh/build: Permission denied`, just $`chmod 777 sh/build`
+
+
+
+## sh/lint ##
+
+$`sh/lint`
+
+
+
+## sh/test ##
+
+$`sh/test`
 
 to
 
@@ -136,21 +160,23 @@ to
 2. [sh/tests/php_syntax.sh](sh/tests/php_syntax.sh)
 
 
-## sh/tests/php_tests.sh ##
+## sh/test_php_tests.sh ##
 
 Runing php test scripts in dir 'tests'.
 
 If the script outputs "OK", the test is considered successfull
 
-See [sh/tests/php_tests.sh](sh/tests/php_tests.sh)
+See [sh/test_php_tests.sh](sh/test_php_tests.sh)
 
 
 
-## sh/tests/php_syntax.sh ##
+## sh/test_php_syntax.sh ##
 
 Syntax checking .php files in dir 'src' (plugins excl.)
 
-See [sh/tests/php_tests.sh](sh/tests/php_syntax.sh)
+See [sh/test_php_tests.sh](sh/test_php_syntax.sh)
+
+
 
 
 
@@ -158,7 +184,17 @@ See [sh/tests/php_tests.sh](sh/tests/php_syntax.sh)
 
 # sh/build #
 
-[...]
+$`sh/build`:
+
+```
+bash
+
+babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
+
+```
+
+
+ - ¿ Also test.. ?
 
 
 
@@ -169,6 +205,7 @@ See [sh/tests/php_tests.sh](sh/tests/php_syntax.sh)
 # Notes #
 
 - pluralisation rules
+
 
 
 
@@ -205,3 +242,4 @@ Traits are a mechanism for code reuse in single inheritance languages such as PH
 A Trait is similar to a class, but only intended to group functionality in a fine-grained and consistent way. It is not possible to instantiate a Trait on its own. It is an addition to traditional inheritance and enables horizontal composition of behavior; that is, the application of class members without requiring inheritance.
 *
 [See php.net/manual/en/language.oop5.traits.php](https://www.php.net/manual/en/language.oop5.traits.php)
+

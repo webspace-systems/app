@@ -5,12 +5,12 @@
 
   <meta charset="utf-8" />
 
-  <title><?=config::get('platform_name');?></title>
+  <title><?=config::get('template', 'title');?></title>
 
   <?php
     if(is_array(config::get('meta')))
       foreach(config::get('meta') as $key=>$value)
-        echo "<meta name='$key' content='$value' />";
+        print "<meta name='$key' content='$value' />";
   ?>
 
 
