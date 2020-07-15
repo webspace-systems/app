@@ -11,8 +11,15 @@ new config();
 
 config::set([
 
-	'template' => [
+	'sql' => [
 
+		'host' => 'localhost',
+		'user' => 'root',
+		'pass' => 'root',
+		'db' => 'platform'
+	],
+
+	'template' => [
 		'meta' => [
 
 			'title' => "app",
@@ -27,10 +34,18 @@ config::set([
 		]
 	],
 	
-	'url' => rtrim( '//'.$_SERVER['HTTP_HOST'].'/'.trim(substr(__DIR__,strlen($_SERVER['DOCUMENT_ROOT'])),'/'), '/'),
+	'url' => trim( (isset($_SERVER['HTTP_HOST'])?'//'.$_SERVER['HTTP_HOST']:'') .'/'. trim( substr(__DIR__,strlen($_SERVER['DOCUMENT_ROOT'])),'/'), '/'),
 
 	'router' => [
-		'root_paths' => [  __DIR__,  __DIR__.'/apps'  ]
+
+		'root_paths' => [
+			 __DIR__, 
+			 __DIR__.'/apps'
+		],
+
+		'frontpage' =>	[  'user/login'  ],
+
+		'error' => [  'error/page',  ''  ]
 	],
 
 	// 'frontpage_component' => 'user/login',
@@ -56,8 +71,8 @@ config::set([
 	],
 
 	'emails' => [
-		'info' => 'info@'.$_SERVER['HTTP_HOST'],
-		'support' => 'support@'.$_SERVER['HTTP_HOST'],
+		'info' => 'info@'.($_SERVER['HTTP_HOST']??'cli'),
+		'support' => 'support@'.($_SERVER['HTTP_HOST']??'cli'),
 	],
 
 	'email_template' => [
@@ -65,16 +80,7 @@ config::set([
 	],
 
 
+	'dev_mode' => !isset($_SERVER['HTTP_HOST']) || in_array(explode(':',$_SERVER['HTTP_HOST'])[0], ['localhost','127.0.0.1']),
 
-	'dev_mode' => in_array(explode(':', $_SERVER['HTTP_HOST'])[0], ['localhost','127.0.0.1']),
 
-
-	'sql' => [
-
-		'host' => 'localhost',
-		'user' => 'root',
-		'pass' => 'root',
-		'db' => 'platform'
-	]
-	
 ]);

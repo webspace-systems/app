@@ -19,6 +19,24 @@ SUCCESS_TOKEN="OK_ALL_GOOD"
 ALT_SUCCESS_TOKEN="OK: FOUND NO ERRORS"
 
 
+conf_exec=false
+
+if ( [ "$1" == '-e' ] )
+then
+	conf_exec=true
+fi
+
+
+git_status=$(git status)
+
+if ( [ "$conf_exec" = 'true' ] ) && ! ( [[ "$git_status" == *"nothing to commit, working directory clean"* ]] )
+then
+	printf "\n\n\e[31mPlease git commit current changes before formatting: $normal\n\n"
+	printf "$git_status\n\n\n\n"
+	exit 1
+fi
+
+
 c=0; for script_file_path in "${exec_scripts[@]}"; do
 
 	((c=c+1))
@@ -31,7 +49,7 @@ c=0; for script_file_path in "${exec_scripts[@]}"; do
 	printf "\n"
 
 
-	if ( [ "$1" == '-e' ] )
+	if ( [ "$conf_exec" = 'true' ] )
 	then
 		
 		printf "Confirmed: \n"
@@ -77,8 +95,5 @@ c=0; for script_file_path in "${exec_scripts[@]}"; do
 
 done
 
-
-printf "\n\n\n\e[32mAll tasks completed. ${normal}"
-
-printf "\n\n\n"
+printf "\n\n\n\e[32mAll tasks completed. ${normal} \n\n\n"
 

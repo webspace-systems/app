@@ -1,8 +1,17 @@
 <?php
 
-include_once 'error/trait.php';
+interface _router_ {
+	
+	static function route ( string $path ) 	: ?	string ;
 
-class router {
+	static function route_debug ( string $path ) ;
+
+	static function resolve_paths ( string $path, array $paths = [] ) 	:	array ;
+
+	static function search_methods ( ) : array ;
+}
+
+class router implements _router_ {
 
 	static public array $base_paths;
 
@@ -10,29 +19,29 @@ class router {
 
 	static public array $accept_as_response = [ 'class'=> 1, 'trait'=> 1, 'interface'=> 1 ];
 
-	static public array $count_loops_per_request = [ ];
+	// To-do: // static public array $indexed_paths_to_names_of_types = [ ];
 
-	// To-do:
-	// static public array $indexed_paths_to_names_of_types = [ ];
+	static public int $count_requests = 0;
+
+	static public array $count_loops_per_request = [ ];
 
 	static public string $debug_path = 'singleton';
 	static public int $debug_skip_occourences = 1;
 
-	static public int $count_requests = 0;
 
-	static function route ( string $pathname ) :? string {
+	static function route ( string $path ) :? string {
 
 		static::$count_requests = static::$count_requests+1;
 
-		if(static::$debug_path == $pathname && static::$debug_skip_occourences)
+		if(static::$debug_path == $path && static::$debug_skip_occourences)
 		{
 			static::$debug_skip_occourences--;
 		}
 
 
-		$pathname = strtr( trim($pathname,'/'),  ['//'=>'_', '/'=>'_'] );
+		$pathname = strtr (  trim( $path, '/' ),  [  '//' => '_',  '/' => '_'  ]  );
 		
-		$paths = static::resolve_paths($pathname); // alt: preg_split('/[_,\/]+/', trim($pathname,'/'));
+		$paths = static::resolve_paths( $path ); // alt: preg_split('/[_,\/]+/', trim($path,'/'));
 
 
 		$included_files = get_included_files();
@@ -53,10 +62,13 @@ class router {
 			foreach ( static::$base_paths ?? [ __DIR__ ] as $base_path )
 			{
 
-				if (  ( $sm_suggested = $sm ( $pathname, rtrim($base_path,'/'), $paths ) )
-				   && ( $fp = realpath(  $sm_suggested[0] ?? $sm_suggested['filepath'] ?? $sm_suggested['fp']  ) )
-				   && !in_array($fp, $exclude_files )
-				   && !in_array($fp, $included_files )
+				if ( ( $sm_suggested  =  $sm (  $pathname,  rtrim($base_path,'/'),  $paths  ) )
+				    &&
+				     ( $fp = realpath(  $sm_suggested[0] ?? $sm_suggested['filepath'] ?? $sm_suggested['fp']  ) )
+				    &&
+				       ! in_array ( $fp, $exclude_files )
+				    &&
+				       ! in_array ( $fp, $included_files )
 				)
 				{
 					include_once $fp;
@@ -112,6 +124,14 @@ class router {
 	}
 
 
+	static function route_debug ( string $path ) :? string {
+
+		static::$debug_path = $path;
+
+		return static::route( $path );
+	}
+
+
 	static function resolve_paths ( string $path, array $paths = [] ) : array {
 
 		preg_match('/[a-z]/i', $path, $first_letter, PREG_OFFSET_CAPTURE);
@@ -128,13 +148,6 @@ class router {
 		return array_merge( $paths, [ $path ] );
 	}
 
-
-	static function route_debug ( string $path ) {
-
-		static::$debug_path = $path;
-
-		$result = static::route( $path );
-	}
 
 
 	static function search_methods() : array {

@@ -9,16 +9,16 @@ new test (
 		'function' => 'router::route'
 	],
 	[
-		[ 'parameters' => [''], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['.'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['index'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['router'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['router.php'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['config'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['config.php'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['sql'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['sql.php'], 'correct_return_type' => 'NULL', 'must_result' => [ 'null', null ]  ],
-		[ 'parameters' => ['_sql'], 'correct_return_type' => 'string', 'must_result' => '_sql'  ]
+		[ 'parameters' => [''], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['.'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['index'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['router'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['router.php'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['config'], 'must_result' => [ 'string', 'config' ]  ],
+		[ 'parameters' => ['config.php'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['sql'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['sql.php'], 'must_result' => [ 'null', null ]  ],
+		[ 'parameters' => ['_sql'], 'must_result' => [ 'string', '_sql' ]  ]
 	]
 );
 

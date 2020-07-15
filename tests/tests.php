@@ -19,17 +19,17 @@ class test {
 	// 	// - To be grep'ed in bash script, to have bash script stop and show error
 
 
+	var string $src_root_path = __DIR__.'/../src';
+
 
 	// To-do: Param. (function) "env-init" - to customize how function is run
-	static function __construct( array $what_to_test, array $expectations ) {
-		print_r(func_get_args(),1);
-
-		exit('rr');
+	function __construct( array $what_to_test, array $expectations ) {
 
 		$this->what_to_test = $what_to_test;
 
-		$function = $what_to_test['function'] OR $this->test_spec_error_exit('Missing param. "function" (to test) in 1nd. arg. array "$what_to_test_to_test".');
+		$file = $what_to_test['file'];
 
+		$function = $what_to_test['function'] OR $this->test_spec_error_exit('Missing param. "function" (to test) in 1nd. arg. array "$what_to_test_to_test".');
 
 		$type = 'function'; // default, to be overwritten by:
 
@@ -39,7 +39,6 @@ class test {
 		}
 
 		$what_to_test['type'] = $type;
-
 
 
 		$this->expectations = $expectations;
@@ -62,7 +61,7 @@ class test {
 
 		if( $type == 'function' )
 		{
-			include ( $filepath = realpath($this->src_root_path) . $file ) OR $this->test_spec_error_exit('File not found: "'.$filepath.'".');
+			require_once ( $filepath = rtrim(realpath($this->src_root_path),'/') . '/' . $file );
 
 			if( ! function_exists( $function ) ) $this->test_spec_error_exit('File was found, but the function was not: "'.$function.'".');
 
@@ -83,17 +82,18 @@ class test {
 			if ( count($obj_meth) !== 2 ) $this->test_spec_error_exit('1st arg. "$what_to_test" param. "$function" must be format either: "classname->methodname" or "classname::methodname" for static.');
 
 
+			require_once ( $filepath = rtrim(realpath($this->src_root_path),'/') . '/' . $file );
+
+
 			//try {
-				$this->try_include_filepath();
-
-
+			//	$this->try_include_filepath( $filepat);
 
 			if( ! class_exists( $obj_meth[0] ) ) $this->test_spec_error_exit('File was found, but the class was not: "'.$obj_meth[0].'".');
 			if( ! method_exists( $obj_meth[0], $obj_meth[1] ) ) $this->test_spec_error_exit('File and class was found, but the method was not: "'.$obj_meth[1].'".');
 
 			foreach( $this->expectations as $scene_idx_k => $exp )
 			{
-				if( ! is_array( $exp['must_result'] ) ) $this->test_spec_error_exit("Expectation '$scene_idx_k': Malformed specification of 'must_result'; Expected: array [ 'type', exact_result_val ] or just [ exact_result_val ]. Got: ".print_r($exp['must_result'],1));
+				if( ! is_array( $exp['must_result'] ) ) $this->test_spec_error_exit("Expectation '$scene_idx_k': Malformed specification of 'must_result'; Expected: array [ 'type', exact_result_val ] or just [ exact_result_val ]. Got: ".print_r($exp['must_result'],1), $exp);
 
 				$exp_type = strtolower($exp['must_result'][0]) ?? 'UNSET';
 				$exp_returned = $exp['must_result'][1] ?? 'UNSET';
@@ -107,7 +107,7 @@ class test {
 					}
 					else
 					{
-						$this->test_spec_error_exit("Malformed \$expectations[ $scene_idx_k ][ \"must_result\" ]. Expected: array [ 'type', exact_result_val ] or just [ exact_result_val ]. Got: ".print_r($exp['must_result'],1));
+						$this->test_spec_error_exit("Malformed \$expectations[ $scene_idx_k ][ \"must_result\" ]. Expected: array [ 'type', exact_result_val ] or just [ exact_result_val ]. Got: ".print_r($exp['must_result'],1), $exp);
 					}
 				}
 				
@@ -116,20 +116,20 @@ class test {
 
 				if ( $exp_type != 'UNSET' && $returned_type !== $exp_type )
 				{
-					$this->fail_exit("Expectation '$scene_idx_k': Unexpected type of result. Expected: '$exp_type'. Got: '$returned_type'. Returned: \"".print_r($returned,1).'".');
+					$this->fail_exit("Expectation '$scene_idx_k': Unexpected type of result. Expected: '$exp_type'. Got: '$returned_type'. Returned: \"".print_r($returned,1).'".', $exp);
 				}
 
 				if ( $exp_returned != 'UNSET' && $returned !== $exp_returned )
 				{
-					$this->fail_exit("Expectation '$scene_idx_k': Unexpected result. Expected: \"".print_r($exp_returned,1)."\". Got: ".print_r($returned,1));
+					$this->fail_exit("Expectation '$scene_idx_k': Unexpected result. Expected: \"".print_r($exp_returned,1)."\". Got: ".print_r($returned,1), $exp);
 				}
 			}
 		}
-		else if( $type == 'file' )
+		/*else if( $type == 'file' )
 		{
 
 			
-		}
+		}*/
 		else $this->test_spec_error_exit("Missing a case for type: '$type'?? Maybe letter casing issue?");
 	}
 
@@ -142,19 +142,20 @@ class test {
 	}
 
 
-	function fail_exit ( string $msg, $incl_spec_data = false, bool $error_output_in_html = null ) {
+	function fail_exit ( string $msg, array $exp = [], $incl_spec_data = false, bool $error_output_in_html = null ) {
 		
 		if( is_null( $error_output_in_html ) && php_sapi_name() != 'cli' )
 		{
 			$error_output_in_html = true;
 		}
 
-		$interpreted_filepath = realpath($this->src_root_path) . $this->what_to_test['file'];
+		$interpreted_filepath = rtrim(realpath($this->src_root_path),'/').'/'.$this->what_to_test['file'];
 
 		$o = "\nFailed test:\n"
 			. "\nType: \n\t{$this->what_to_test['type']}\n"
 			. "\nFile: \n\t{$this->what_to_test['file']} {$interpreted_filepath}\n"
 			. "\nFunction: \n\t{$this->what_to_test['function']}\n"
+			. "\nExpectation: \n\t".print_r($exp,true)."\n"
 			. "\nMsg, if any: \n\t{$msg}\n"
 			. ( $incl_spec_data ? 
 					"\n\n"
@@ -223,4 +224,3 @@ class test {
 	function validate_array_structure ( ...$args ) :? array { call_user_func_array([$this, 'array_structure_valid'], $args); }
 
 }
-
