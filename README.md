@@ -10,7 +10,7 @@
 
 - - [__template__](#template)
 
-- - [__asset_load_controller__](#asset_load_controller-plugin)
+- - [__plugins/asset_load_controller__](#pluginsasset_load_controller)
 
 - - [__public__](#public)
 
@@ -71,7 +71,7 @@ Template front-end [...]
 
 ## plugins/asset_load_controller ##
 
-JS feature to ensuring complete loading of all css and js assets (and maybe iframes?).
+JS feature to ensuring complete loading of all css and js assets,
 Compiled and inserted directly in the header.
 [https://github.com/theiscnp/Asset_Load_Controller](https://github.com/theiscnp/Asset_Load_Controller)
 
