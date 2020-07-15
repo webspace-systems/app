@@ -206,6 +206,7 @@ babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
 
 - pluralisation rules
 
+- `const findComponentByPath = (path, routes) => routes.find(r => r.path.match(new RegExp(`^\\${path}$`, 'gm'))) || undefined;`
 
 
 

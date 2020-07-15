@@ -2,11 +2,20 @@
 
 trait _template_003 {
 
-	// Requires available function on $this->...
 	abstract function requested ( string $get_certain_key );
 	abstract function get_url ( string $get_certain_key );
 
-	var $template_config = [
+	var $_template_require_files = 
+		[
+			['script', 'src'=>'js-utils/api_ajax.js'],
+			['script', 'src'=>'js-utils/functions.js'],
+			
+			['script', 'src'=>'template.js'],
+			['style', 'src'=>'template.css'],
+		]
+	;
+
+	var $_template_config = [
 
 		'meta' => [
 			'title' => 'Untitled',
@@ -65,7 +74,7 @@ trait _template_003 {
 	}
 
 
-	function template ( $to_be_wrapped, array $incl_template_require = [] ) : string {
+	function template ( array $content, array $require_files = [] ) : string {
 
 
 		$config = $this->template_config();
@@ -73,7 +82,7 @@ trait _template_003 {
 
 		if( $this->requested('template_component') )
 		{
-			return $to_be_wrapped;
+			return $content;
 		}
 		else
 		{
@@ -152,6 +161,93 @@ trait _template_003 {
 
 
 	function template_doc_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
+
+		$config = $this->template_config();
+
+		if ( is_string ( $doc[0] ) )
+		{
+			$doc = [$doc];
+		}
+		else if ( isset( $doc[0] ) && sizeof($doc) == 1 && is_array($doc[0]) && isset($doc[0][0]) && is_array($doc[0][0]) )
+		{
+			$doc = $doc[0];
+		}
+
+		$html = [];
+
+
+		$padding = str_repeat("	", $depth);
+
+		$tags_no_content = [ 'meta', 'br', 'input', 'link' ];
+
+		$valid_types_of_attribute_value = [ 'string', 'integer', 'double', 'boolean' ];
+
+
+		foreach( $doc as $dk => $elem )
+		{
+
+			if( is_string ( $elem ) )
+			{
+				$html[] = $padding . $elem;
+
+				continue;
+			}
+
+			if( ! is_array( $elem ) )
+			{
+				trigger_error("Invalid \$doc \$elem; must be string or array; Got type: '".gettype($elem)."'; ".print_r($elem,1), E_USER_WARNING);
+			}
+
+
+			if ( sizeof ( $elem ) == 0
+			    || ( ! is_string( $elem[0] ) && trigger_error("Invalid \$doc \$elem; Missing tag name at index/key 0 in given \$elem: ".print_r($doc,1), E_USER_ERROR) )
+			)
+				continue;
+
+		$module = [
+			'name' => get_class($this),
+			'contents' => $content,
+			'require_files' => $require_files
+		];
+
+			$e_contents = array_filter($elem, 'is_numeric', ARRAY_FILTER_USE_KEY);
+
+			if( empty( $e_contents ) )
+			{
+				continue;
+			}
+
+
+			$e_str_contents = array_filter($e_contents, 'is_string');
+
+			if( count($e_str_contents) === count($elem) && ! in_array($elem[0], $config['html_tags_valid']) )
+			{
+				foreach( $e_str_contents as $sc )
+				{
+					$html[] = $padding . $sc;
+				}
+						file_get_contents('plugins/asset_load_controller/script_built.js'),
+
+						'var ASL = new Asset_Load_Controller (',
+							json_encode($ASL_config) . ',',
+							json_encode($this->_template_require_files) . ',',
+							'`template.init ( ',
+								json_encode($this->template_config()).', ',
+								json_encode($module)
+							.')`',
+						')'
+					]]
+				]],
+
+				['body', 'class'=>"loading"]
+			]]
+		];
+
+		return $this->template_render($doc);
+	}
+
+
+	function template_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
 
 		$config = $this->template_config();
 
@@ -284,7 +380,7 @@ trait _template_003 {
 				if(!empty($e_contents))
 				{
 
-					$content = $this->template_doc_render($e_contents, $depth+1, $e_path, true);
+					$content = $this->template_render($e_contents, $depth+1, $e_path, true);
 
 					if ( sizeof($content) > 1)
 					{
