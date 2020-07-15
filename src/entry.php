@@ -4,17 +4,10 @@ require 'router.php';
 
 spl_autoload_register(['router','route']);
 
-
-$config_router = config::get( 'router', [ 'root_paths', 'frontpage' ], ( $REQUIRED = TRUE ) );
-
-router::$base_paths = $config_router['root_paths'];
-
+router::$base_paths = config::get( 'router', 'root_paths', true );
 
 set_error_handler(['_error','_on_error']);
 register_shutdown_function(['_error','_on_shutdown']);
-
-
-$config_router = 
 
 
 $path = trim( urldecode($_SERVER['REQUEST_URI']), '/');
@@ -30,7 +23,7 @@ if($url_subdir && substr($path,0,strlen($url_subdir)) == $url_subdir)
 }
 
 
-$route_path = $path ?: config::get('router', 'frontpage', true) ?: 'public';
+$route_path = $path  ?:  config::get('router','frontpage')  ?:  'public';
 
 $route = router::route( $route_path );
 

@@ -77,10 +77,11 @@ class model {
 
 		$val = null;
 
-		if ( property_exists($this, $key_paths[0]) )
+		if ( property_exists($this, $key_paths[0])
+			&&
+		     is_array( $_val = $this->{$key_paths[0]} )
+		)
 		{
-			$_val = $this->{$key_paths[0]};
-
 			array_shift($key_paths);
 
 			$depth_required = count($key_paths)-1;
@@ -105,5 +106,4 @@ class model {
 
 		return $val;
 	}
-
 }

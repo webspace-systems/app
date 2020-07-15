@@ -43,9 +43,9 @@ config::set([
 			 __DIR__.'/apps'
 		],
 
-		'frontpage' =>	[  'user/login'  ],
+		// 'frontpage' => 'user/login',
 
-		'error' => [  'error/page',  ''  ]
+		'error' => 'error/page'
 	],
 
 	// 'frontpage_component' => 'user/login',
