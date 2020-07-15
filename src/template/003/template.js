@@ -1,7 +1,6 @@
 
 class template {
 
-
 	constructor () {
 
 		this.initialized = false
@@ -10,9 +9,7 @@ class template {
 	}
 
 
-	init () {
-
-		if( this.initialized ) return console.trace('Already initialized');
+	static init () {
 
 		console.log('test');
 
