@@ -209,11 +209,6 @@ trait _template_003 {
 			)
 				continue;
 
-		$module = [
-			'name' => get_class($this),
-			'contents' => $content,
-			'require_files' => $require_files
-		];
 
 			$e_contents = array_filter($elem, 'is_numeric', ARRAY_FILTER_USE_KEY);
 
@@ -222,6 +217,12 @@ trait _template_003 {
 				continue;
 			}
 
+
+			$module = [
+				'name' => get_class($this),
+				'contents' => $content,
+				'require_files' => $require_files
+			];
 
 			$e_str_contents = array_filter($e_contents, 'is_string');
 
