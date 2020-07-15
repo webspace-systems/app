@@ -1,6 +1,6 @@
 
+/*
 function valid_arg_types( arguments = {}, spec = {}, err = null ) {
-
 
 	console.log('spec', spec)
 	console.log('args', arguments)
@@ -16,8 +16,8 @@ function valid_arg_types( arguments = {}, spec = {}, err = null ) {
 
 	err = 'tester';
 
-
 }
+*/
 
 
 const arg_spec_f_class_exists = {

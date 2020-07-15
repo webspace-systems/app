@@ -2,12 +2,10 @@
 
 trait _template_003 {
 
-	// Requires available function on $this->...
 	abstract function requested ( string $get_certain_key );
 	abstract function get_url ( string $get_certain_key );
 
-
-	var $require_load_files = 
+	var $_template_require_files = 
 		[
 			['script', 'src'=>'js-utils/api_ajax.js'],
 			['script', 'src'=>'js-utils/functions.js'],
@@ -65,7 +63,7 @@ trait _template_003 {
 	}
 
 
-	function template ( $to_be_wrapped, array $incl_require_load_files = [] ) : string {
+	function template ( array $content, array $require_files = [] ) : string {
 
 
 		$config = $this->template_config();
@@ -73,7 +71,7 @@ trait _template_003 {
 
 		if( $this->requested('template_component') )
 		{
-			return $to_be_wrapped;
+			return $content;
 		}
 
 
@@ -94,6 +92,11 @@ trait _template_003 {
 
 		$ASL_config = array_merge([ 'base_url'=> $this->template_url() ], $config['ASL']??[]);
 
+		$module = [
+			'name' => get_class($this),
+			'contents' => $content,
+			'require_files' => $require_files
+		];
 
 		$doc = [
 
@@ -105,49 +108,28 @@ trait _template_003 {
 
 					['script', [
 
-						file_get_contents('plugins/asset_load_controller/script_source.js'),
+						file_get_contents('plugins/asset_load_controller/script_built.js'),
 
-						'var ASL = new Asset_Load_Controller(',
+						'var ASL = new Asset_Load_Controller (',
 							json_encode($ASL_config) . ',',
-							json_encode($this->require_load_files) . ',',
-							'()=>(window.Template = new template()).init())',
+							json_encode($this->_template_require_files) . ',',
+							'`template.init ( ',
+								json_encode($this->template_config()).', ',
+								json_encode($module)
+							.')`',
 						')'
 					]]
-				
 				]],
 
-				['body', 'class' => "loading", [
-
-				]]
+				['body', 'class'=>"loading"]
 			]]
 		];
 
-		return $this->template_doc_render($doc);
+		return $this->template_render($doc);
 	}
 
 
-	function doc ( ...$args ) {
-
-		return $this->template(...$args);
-	}
-
-
-	function docf ( string $filepath ) : string {
-
-		if(substr($filepath,0,4) != substr(__DIR__,0,4) && substr($filepath,0,1)!='/')
-		{
-			$filepath = dirname(debug_backtrace()[0]['file']) . '/' . $filepath;
-		}
-
-		ob_start();
-
-		include_once $filepath;
-
-		return $this->doc( ob_get_clean() );
-	}
-
-
-	function template_doc_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
+	function template_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
 
 		$config = $this->template_config();
 
@@ -280,7 +262,7 @@ trait _template_003 {
 				if(!empty($e_contents))
 				{
 
-					$content = $this->template_doc_render($e_contents, $depth+1, $e_path, true);
+					$content = $this->template_render($e_contents, $depth+1, $e_path, true);
 
 					if ( sizeof($content) > 1)
 					{
