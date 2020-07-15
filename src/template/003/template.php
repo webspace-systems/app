@@ -164,7 +164,6 @@ trait _template_003 {
 	}
 
 
-	// A template_render
 	function template_doc_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
 
 		$config = $this->template_config();
@@ -253,7 +252,6 @@ trait _template_003 {
 	}
 
 
-	/*
 	function template_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
 
 		$config = $this->template_config();
@@ -414,6 +412,5 @@ trait _template_003 {
 
 		return $ret_array ? $html : implode( "\n", $html );
 	}
-	*/
 
 }
