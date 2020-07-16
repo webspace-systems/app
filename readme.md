@@ -143,7 +143,7 @@ Fx. maybe we can also make JS unit tests using Babel...?!
 
 
 
-If you get: `-bash: sh/build: Permission denied`, just $`chmod 777 sh/build`
+If you get fx __`-bash: sh/build: Permission denied`__  just  `$  chmod 777 sh/build `
 
 
 
@@ -152,7 +152,7 @@ If you get: `-bash: sh/build: Permission denied`, just $`chmod 777 sh/build`
 ## sh/lint ##
 
 
-	$ `sh/lint`
+  `$  sh/lint `
 
 
 to
@@ -182,7 +182,7 @@ to
 ## sh/test ##
 
 
-	$ `sh/test`
+  `$  sh/test `
 
 
 to
@@ -220,10 +220,11 @@ See [sh/test_php_tests.sh](sh/test_php_syntax.sh)
 
 # sh/build #
 
-$`sh/build`:
+  
+  `$  sh/build `
 
-```
-bash
+
+```bash
 
 babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
 
