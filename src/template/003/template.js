@@ -15,8 +15,6 @@ class template {
 
 		this.initialized = true
 
-		console.log('new', arguments)
-
 		this.config = 
 		{
 			html_attr_val_double_quotes_may_fallback_to: "”",
@@ -26,7 +24,7 @@ class template {
 			...config
 		}
 
-		this.html_tags_valid = [
+		this.components = [
 			'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo',
 			'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup',
 			'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed',
@@ -39,6 +37,18 @@ class template {
 			'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 		]
 
+		console.log('callee', arguments.callee.toString())
+/*
+		let args = 
+  var fnStr = this..toString().replace(STRIP_COMMENTS, '');
+  var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if(result === null)
+     result = [];
+  return result;*/
+
+		console.log('template constructed', Object.values({...arguments}))
+
+		console.log('template constructed', Object.values({...arguments}))
 	}
 
 
@@ -125,7 +135,7 @@ class template {
 
 			var e_str_contents = elem.filter((k,v)=> typeof v == 'string' )
 
-			if( e_str_contents.length === elem.length && this.html_tags_valid.indexOf( elem[0] ) < 0 )
+			if( e_str_contents.length === elem.length && this.components.indexOf( elem[0] ) < 0 )
 			{
 				for ( var ck in e_str_contents )
 				{

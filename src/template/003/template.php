@@ -2,15 +2,13 @@
 
 trait _template_003 {
 
-
-	// Methods required available on $this
-
 	abstract function requested ( string $get_certain_key );
 	
 	abstract function get_url ( string $get_certain_key );
 
-
-	// Config by  $this->template_config ( array $config )  or custom logic in this function
+	var $template_render_components = [ 'txt', ...['a','abbr','address','area','article','aside','audio','b','base','bdi','bdo','blockquote','body','br','button','canvas','caption','cite','code','col','colgroup','data','datalist','dd','del','details','dfn','dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form','h1','h2','h3','h4','h5','h6','head','header','hgroup','hr','html','i','iframe','img','input','ins','kbd','label','legend','li','link','main','map','mark','menu','meta','meter','nav','noscript','object','ol','optgroup','option','output','p','param','picture','pre','progress','q','rp','rt','ruby','s','samp','script','section','select','slot','small','source','span','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','u','ul','var','video','wbr']];
+	
+	var $template_tags_no_content = [ 'meta', 'br', 'input', 'link' ];
 
 	var $_template_config = [
 
@@ -30,23 +28,6 @@ trait _template_003 {
 
 		'did_config' => false
 	];
-
-
-	// Error if unable to load required js & css
-
-	var $_template_require = 
-		[
-			['script', 'src'=>'js-utils/api_ajax.js'],
-			['script', 'src'=>'js-utils/functions.js'],
-			
-			['script', 'src'=>'template.js'],
-			['style', 'src'=>'template.css'],
-		]
-	;
-
-
-	var $html_tags_valid = ['a','abbr','address','area','article','aside','audio','b','base','bdi','bdo','blockquote','body','br','button','canvas','caption','cite','code','col','colgroup','data','datalist','dd','del','details','dfn','dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form','h1','h2','h3','h4','h5','h6','head','header','hgroup','hr','html','i','iframe','img','input','ins','kbd','label','legend','li','link','main','map','mark','menu','meta','meter','nav','noscript','object','ol','optgroup','option','output','p','param','picture','pre','progress','q','rp','rt','ruby','s','samp','script','section','select','slot','small','source','span','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','u','ul','var','video','wbr'];
-
 
 	function template_config ( $set_array_or_get_str_key = null ) : array {
 
@@ -85,9 +66,11 @@ trait _template_003 {
 
 	function template ( array $content, array $require_files = [] ) : void {
 
+
 		$config = $this->template_config();
 
-		if( $this->requested('template_component') )
+
+		if( $this->requested('template_render_component') )
 		{
 
 			echo $content;
@@ -114,6 +97,9 @@ trait _template_003 {
 			$ASL_config = array_merge([ 'base_url'=> $this->template_url() ], $config['ASL']??[]);
 
 
+			$Template_config = [ ];
+
+
 			$doc = [
 
 				['html', [
@@ -122,21 +108,13 @@ trait _template_003 {
 
 						...$meta_settings,
 
-						['script', [
+						['script', [ file_get_contents('plugins/asset_load_controller/script_built.js') ]],
 
-							file_get_contents('plugins/asset_load_controller/script_built.js'),
+						['script', 'window' => [
 
-							'var ASL = new Asset_Load_Controller (',
-								json_encode($ASL_config) . ',',
-								json_encode($this->_template_require) . ',',
-								'`',
-									'template.init ( '.json_encode($this->template_config()).', () => {',
-
-										'console.log("LOADING COMPLETE")',
-
-									'})',
-								'`',
-							')',
+							'ASL' => 'new Asset_Load_Controller ( '.json_encode ( $ASL_config ).' )',
+								
+							'Template' => 'new (ASL.m("template")) ( '.json_encode( $this->template_config() ).' )',
 						]]
 					]],
 
@@ -144,395 +122,205 @@ trait _template_003 {
 				]]
 			];
 
-			echo $this->template_render($doc);
+			$rendered = $this->template_render ( $doc );
+
+			print is_array($rendered) ? implode("\n", $rendered) : $rendered;
 		}
 	}
 
 
-	function doc ( ...$args ) {
-
-		return $this->template(...$args);
-	}
-
-
-	function docf ( string $filepath ) : string {
-
-		if(substr($filepath,0,4) != substr(__DIR__,0,4) && substr($filepath,0,1)!='/')
-		{
-			$filepath = dirname(debug_backtrace()[0]['file']) . '/' . $filepath;
-		}
-
-		ob_start();
-
-		include_once $filepath;
-
-		return $this->doc( ob_get_clean() );
-	}
-
-	/*
-	function template_doc_render ( array $doc, int $depth = 0, array $path = [], bool $ret_array = false ) {
-
-		$config = $this->template_config();
-
-		if ( is_string ( $doc[0] ) )
-		{
-			$doc = [$doc];
-		}
-		else if ( isset( $doc[0] ) && sizeof($doc) == 1 && is_array($doc[0]) && isset($doc[0][0]) && is_array($doc[0][0]) )
-		{
-			$doc = $doc[0];
-		}
+	
+	function template_render ( array $doc, int $depth = 0, array $path = [] ) : array {
 
 		$html = [];
 
-
-		$padding = str_repeat("	", $depth);
-
-		$tags_no_content = [ 'meta', 'br', 'input', 'link' ];
-
-		$valid_types_of_attribute_value = [ 'string', 'integer', 'double', 'boolean' ];
-
-
-		foreach( $doc as $dk => $elem )
+		foreach (  $doc  as  $k => $v )
 		{
-
-			if( is_string ( $elem ) )
+			
+			if ( is_array ( $v ) && is_string ( $v[0] ) )
 			{
-				$html[] = $padding . $elem;
 
-				continue;
-			}
-
-			if( ! is_array( $elem ) )
-			{
-				trigger_error("Invalid \$doc \$elem; must be string or array; Got type: '".gettype($elem)."'; ".print_r($elem,1), E_USER_WARNING);
-			}
-
-
-			if ( sizeof ( $elem ) == 0
-			    || ( ! is_string( $elem[0] ) && trigger_error("Invalid \$doc \$elem; Missing tag name at index/key 0 in given \$elem: ".print_r($doc,1), E_USER_ERROR) )
-			)
-				continue;
-
-
-			$e_contents = array_filter($elem, 'is_numeric', ARRAY_FILTER_USE_KEY);
-
-			if( empty( $e_contents ) )
-			{
-				continue;
-			}
-
-
-			$module = [
-				'name' => get_class($this),
-				'contents' => $content,
-				'require_files' => $require_files
-			];
-
-			$e_str_contents = array_filter($e_contents, 'is_string');
-
-			if( count($e_str_contents) === count($elem) && ! in_array($elem[0], $this->html_tags_valid) )
-			{
-				foreach( $e_str_contents as $sc )
+				if ( in_array ( $v[0], $this->template_render_components ) )
 				{
-					$html[] = $padding . $sc;
+					$comp = $v[0];
+
+					$props = array_slice ( $v, 1 );
+
+					if ( class_exists ( $comp )  &&  method_exists ( $comp, 'render' ) )
+					{
+						if ( is_array( $rendered = $comp::render ( $props ) ) )
+						{
+							array_push ( $html, ...$rendered );
+						}
+						else
+						{
+							array_push ( $html, $rendered );
+						}
+					}
+					else
+					{
+						if ( method_exists( $this, ( $tm = 'template_'.$comp.'_render' ) ) )
+						{
+							$res = $this->{$tm} ( $props );
+
+							if ( is_array ( $res )  )
+							{
+								array_push ( $html, ...$res );
+							}
+							else
+							{
+								array_push ( $html, ...[$res] );
+							}
+						}
+						else
+						{
+							array_push ( $html, ...$this->template_comp_render ( $comp, $props??[], $depth+1, [...$path, $comp] ) );
+						}
+					}
 				}
-						file_get_contents('plugins/asset_load_controller/script_built.js'),
+				else
+				{
+					trigger_error('Unable to render: "'.print_r($v[0],true).'"', E_USER_ERROR);
+				}
 
-						'var ASL = new Asset_Load_Controller (',
-							json_encode($ASL_config) . ',',
-							json_encode($this->_template_require) . ',',
-							'`template.init ( ',
-								json_encode($this->template_config()).', ',
-								json_encode($module)
-							.')`',
-						')'
-					]]
-				]],
+			}
+			else
+			{
+				array_push ( $html, $v );
+			}
+		}
 
-				['body', 'class'=>"loading"]
-			]]
-		];
-
-		return $this->template_render($doc);
+		return $html;
 	}
-	*/
-	
-	function template_render ( array $doc, int $depth = 0, array $path = [], $ret_array = false ) {
 
 
-		$config = $this->template_config();
+	function template_comp_render ( string $comp, array $props, int $depth = 0, array $path = [] ) : array {
+
+		$html = [];
+
+		$padding = str_repeat ( ( $pad = '	' ), max ( $depth-1, 0 ) );
+
+		$elem_html = '<' . $comp;
+		
+		$contents = [];
+
+		foreach (  $props  as  $prop_key  =>  $prop_val  ):
+
+			if ( is_numeric ( $prop_key ) )
+			{
+
+				if ( is_array ( $prop_val ) )
+				{
+					array_push ( $contents, ... $this->template_render ( $prop_val, $depth, [...$path, $prop_key] ) );
+				}
+				else
+				{
+					exit('GOT here... '.print_r(['$prop_key'=>$prop_key,'$prop_val'=>$prop_val,'$path'=>$path],true));
+				}
+
+			}
+			else if ( is_array ( $prop_val ) )
+			{
+				array_push ( $contents, ... $this->template_render ( $prop_val, $depth, [...$path, $prop_key] ) );
+			}
+			else if ( is_string ( $prop_val ) )
+			{
+				$quote_char = '"';
+
+				if ( is_array ( $prop_val ) )
+				{
+					exit(print_r(["GOT ARRAY ATTRIBUTE VALUE",$comp,$prop_key,$html],true));
+				}
+
+				if ( strpos("$prop_val", '"') !== false )
+				{
+					if ( strpos ( "$prop_val", "'" ) === false )
+					{
+						$quote_char = "'";
+					}
+					else if ( $config['html_attr_val_double_quotes_may_fallback_to'] )
+					{
+						$quote_char = '"';
+
+						$prop_val = str_replace('"', $config['html_attr_val_double_quotes_may_fallback_to']??'“', $prop_val);
+					}
+					else
+					{
+						trigger_error("Unable to set value of attr. \"$prop_key\" as it contains both single and double quotes: $prop_val", E_USER_ERROR);
+					}
+				}
 
 
-		if (
-			  is_string ( $doc[0] )
-		)
+				$elem_html .= ' ' . $prop_key . '=' . $quote_char . $prop_val . $quote_char;
+			}
+			else
+			{
+				trigger_error (
+					"Invalid type of attribute value: \"".gettype($prop_val)."\": \"".print_r($prop_val,1)."\""
+				   . "given for attribute name '$prop_key' in \$props: ".json_encode($props),
+				   E_USER_ERROR
+				);
+			}
+
+		endforeach;
+
+
+		if ( in_array ( $comp, $this->template_tags_no_content ) && ! $contents )
 		{
-			$doc = [$doc];
+			array_push ( $html, $elem_html.' />' );
 		}
 		else
-		if (
-			  isset ( $doc[0] )
-		   &&
-		     sizeof ( $doc ) == 1
-		   &&
-		     is_array ( $doc[0] )
-		   &&
-		     isset ( $doc[0][0] )
-		   &&
-		     is_array ( $doc[0][0] )
-		)
 		{
-			$doc = $doc[0];
+			switch ( sizeof ( $contents ) )
+			{
+				case 0:
+
+					if ( in_array ( $comp, $this->template_tags_no_content ) )
+
+						array_push ( $html, $elem_html.' />' );
+					else
+						array_push ( $html, $elem_html.'></'.$comp.'>' );
+				break;
+
+				case 1:
+
+					array_push ( $html, $elem_html.'>'.$contents[0].'</'.$comp.'>' );
+				break;
+				
+				default:
+
+					array_push ( $html, $elem_html.'>' );
+
+					foreach ( $contents as $content )
+					{
+						array_push ( $html, $pad . $content );
+					}
+		
+					array_push ( $html, '</'.$comp.'>' );
+				break;
+			}
 		}
 
-
-
-		$html = [];
-
-
-
-		$padding = str_repeat("	", $depth);
-
-
-		$tags_no_content = [ 'meta', 'br', 'input', 'link' ];
-
-
-		$valid_types_of_attribute_value = [ 'string', 'integer', 'double', 'boolean' ];
-
-
-
-
-		foreach( $doc as $dk => $elem ):
-
-
-
-			if(  is_string ( $elem )  )
-			{
-
-				$html[] = $padding . $elem;
-
-
-				continue;
-			}
-
-
-
-			if(  ! is_array( $elem )  )
-			{
-				trigger_error("Invalid \$doc \$elem; must be string or array; Got type: '".gettype($elem)."'; ".print_r($elem,1), E_USER_WARNING );
-			}
-
-
-
-			if (  sizeof ( $elem ) == 0  )
-			{
-
-				if (  ! is_string( $elem[0] )  )
-				{
-					trigger_error("Invalid \$doc \$elem; Missing tag name at index/key 0 in given \$elem: ".print_r($doc,1), E_USER_ERROR );
-				}
-
-
-				continue;
-
-			}
-
-
-
-
-			$e_contents = array_filter($elem, 'is_numeric', ARRAY_FILTER_USE_KEY);
-
-
-
-			if ( empty ( $e_contents ) )
-			{
-				continue;
-			}
-
-
-
-
-			$e_str_contents = array_filter($e_contents, 'is_string');
-
-
-
-
-			if (  count ( $e_str_contents )  ===  count ( $elem )
-				&&
-				   ! in_array ( $elem[0],  $this->html_tags_valid )
-			)
-			{
-				foreach (  $e_str_contents  as  $sc  )
-				{
-
-					$html[] = $padding . $sc;
-				
-				}
-
-
-				continue;
-			}
-
-
-
-
-			$e_name = $e_contents[0];
-
-			$e_contents = array_slice($e_contents, 1);
-
-			$e_path = [ ...$path, $e_name ];
-
-			$e_attrs = array_filter($elem, 'is_string', ARRAY_FILTER_USE_KEY);
-
-
-
-			
-			// Correct tag attribute 'link' attr. 'src' > 'href'
-
-			// Correct tag name 'style' > 'link' if has attr 'href'
-
-			if ( in_array (  $e_name,  [  'style',  'link'  ] ) ):
-
-				if ( isset ( $e_attrs['src'] ) ):
-
-					$e_attrs['href'] = $e_attrs['src'];
-
-					unset ( $e_attrs['src'] );
-				
-				endif;
-
-				if ( isset ( $e_attrs['href'] ) ):
-
-					$e_name = 'link';
-
-				endif;
-
-			endif;
-
-
-
-
-			$elem_html = $padding . '<' . $e_name;
-
-
-
-			foreach (  $e_attrs  as  $attr_name  =>  $attr_value  ):
-
-
-				if(  ! in_array ( gettype( $attr_value ), $valid_types_of_attribute_value ) ):
-
-					trigger_error("Invalid type of attr. value: ".gettype($attr_value).": '".print_r($attr_value,1)."' given for attr. name '$attr_name' in \$elem: ".json_encode($elem), E_USER_ERROR);
-
-				endif;
-
-
-				$quote_char = ( strpos($attr_value, '"') !== false ) ? "'" : '"';
-
-				if (
-					  $quote_char == "'"
-					&& 
-					  strpos ( $attr_value, "'" ) !== false
-				)
-				{
-					if($config['html_attr_val_double_quotes_may_fallback_to'])
-					{
-						$attr_value = str_replace('"', $config['html_attr_val_double_quotes_may_fallback_to']??'“', $attr_value);
-					}
-
-					trigger_error("Unable to set value value of attr. name '$attr_name', as it contains both single and double quotes: ".gettype($attr_value).": '$attr_value' given for attr. name '$attr_name' of \$elem: ".json_encode($elem), E_USER_ERROR);
-				}
-
-
-				$elem_html .= ' ' . $attr_name . '=' . $quote_char . $attr_value . $quote_char;
-
-
-			endforeach; //  $e_attrs  as  $attr_name  =>  $attr_value
-
-			
-			
-
-
-			if ( in_array ( $e_name, $tags_no_content ) ):
-
-
-
-				$elem_html .= ' />';
-
-
-				$html[] = $elem_html;
-
-
-
-			else:
-
-
-
-				if ( ! empty ( $e_contents ) ):
-
-
-
-					$content = $this->template_render (  $e_contents,  $depth+1,  $e_path,  true  );
-
-
-
-					if (  sizeof ( $content ) > 1  ):
-
-
-						$html[] = $elem_html . '>';
-
-
-						foreach (  $content  as  $cl  ):
-
-
-							$html[] = $cl;
-
-						endforeach;
-
-
-						$html[] = $padding . "</$e_name>";
-
-
-					elseif
-					(
-						  isset ( $content[0] )
-						&&
-						  is_string ( $content[0] )
-					):
-
-
-						$html[] = $elem_html . '>' . trim ( $content[0] ) . '</'.$e_name.'>';
-
-
-					else:
-
-						trigger_error ( 'What else ?', E_USER_WARNING );
-
-					endif;
-
-
-				
-				else:
-
-				
-					$html[] = $elem_html . '>' . "</$e_name>";
-				
-
-				endif; // ! empty ( $e_contents )
-
-
-
-
-			endif; // in_array ( $e_name, $tags_no_content )
-		
-
-
-		endforeach; //  $doc  as  $dk  =>  $elem
-
-
-
-		return  $ret_array ? $html : implode ( "\n", $html );
+		return array_map (  function( $v ) use ( $padding ) { return $padding . $v; },  $html  );
 	}
 
 
+	function _template_script_render ( array $props ) : array {
+
+		$html = [];
+
+		foreach ( $props as $prop  )
+		{
+			if ( is_array ( $prop ) )
+			{
+				array_push( $html, ...$this->template_script_render ( $prop ) );
+			}
+			else
+			{
+				array_push( $html, $prop );
+			}
+		}
+
+		return $html;
+	}
 }
