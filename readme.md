@@ -1,5 +1,7 @@
 
-# app components #
+
+#  components  #
+
 
 
 - [__router.php__](#routerphp)
@@ -38,7 +40,9 @@
 
 
 
-# router.php #
+
+#  router.php  #
+
 
 [...]
 
@@ -47,26 +51,31 @@
 
 
 
-# app.php #
 
-See [index.php](src/index.php)
+
+#  app.php  #
+
+
+Implemented by [index.php](src/index.php)
+
+ 
 
  - See component [user/login](src/user/login) for example of component working as page module.
 
  - A component can also supply php traits like sql and error handling, or js like functions for ajax communication.
 
 
-## config.php ##
+##  config.php  ##
 
 [...]
 
 
-## template ##
+##  template  ##
 
 Template front-end [...]
 
 
-## plugins/asset_load_controller ##
+##  plugins/asset_load_controller  ##
 
 JS feature to ensuring complete loading of all css and js assets,
 Compiled and inserted directly in the header.
@@ -80,7 +89,7 @@ Compiled and inserted directly in the header.
 
 
 
-# error/trait.php #
+#  error/trait.php  #
 
 [Probably outdated]
 
@@ -100,7 +109,7 @@ function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = fa
 
 
 
-# error/error.js #
+#  error/error.js  #
 
 front-end error handling
 
@@ -108,7 +117,7 @@ front-end error handling
 
 
 
-# sql/trait.php #
+#  sql/trait.php  #
 
 always returning sql instance
 
@@ -116,7 +125,7 @@ always returning sql instance
 
 
 
-# user/trait.php #
+#  user/trait.php  #
 
 Simple user system incl. trait function 'user' & 'user_require'.
 
@@ -127,7 +136,7 @@ Simple user system incl. trait function 'user' & 'user_require'.
 
 
 
-# sh #
+#  sh  #
 
 
 Bash scripts to:
@@ -153,14 +162,14 @@ Bash scripts to:
 
 
 
-If you get fx __`-bash: sh/build: Permission denied`__  just  `$  chmod 777 sh/build `
+If you get fx __`-bash: sh/build: Permission denied`__  just  $ `chmod 777 sh/build`
 
 
 
-## sh/lint ##
+##  sh/lint  ##
 
 
-  `$  sh/lint `
+  $ `sh/lint`
 
 
 to
@@ -171,13 +180,13 @@ to
 
 
 
-### sh/lint_js ###
+## # sh/lint_js # ##
 
 [...]
 
 
 
-### sh/lint_php ###
+## # sh/lint_php # ##
 
 [...]
 
@@ -187,10 +196,10 @@ to
 
 
 
-## sh/test ##
+##  sh/test  ##
 
 
-  `$  sh/test `
+  $ `sh/test`
 
 
 to
@@ -204,7 +213,7 @@ to
 
 
 
-## sh/test_php_tests.sh ##
+##  sh/test_php_tests.sh  ##
 
 Runing php test scripts in dir 'tests'.
 
@@ -214,7 +223,7 @@ See [sh/test_php_tests.sh](sh/test_php_tests.sh)
 
 
 
-## sh/test_php_syntax.sh ##
+##  sh/test_php_syntax.sh  ##
 
 Syntax checking .php files in dir 'src' (plugins excl.)
 
@@ -222,23 +231,23 @@ See [sh/test_php_tests.sh](sh/test_php_syntax.sh)
 
 
 
-## sh/test_js_syntax ##
+##  sh/test_js_syntax  ##
 
 [...]
 
 
-## sh/test_js_tests ##
+##  sh/test_js_tests  ##
 
-[`$  node ./node_modules/babel-cli/bin/babel-node.js tests/error/trait.js `]
-
-
+[$ `node ./node_modules/babel-cli/bin/babel-node.js tests/error/trait.js `]
 
 
 
-## sh/build ##
+
+
+##  sh/build  ##
 
   
-  `$  sh/build `
+  $ `sh/build`
 
 
 ```bash
@@ -263,7 +272,7 @@ babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
 
 
 
-# Notes #
+#  Notes  #
 
 - pluralisation rules
 
@@ -275,7 +284,7 @@ babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
 
 
 
-## About PHP "Traits" ##
+##  About PHP "Traits"  ##
 
 Traits extend the class applied to.
 The methods of the trait are protected agains overwriting if not extended like `parent::__construct();`.
