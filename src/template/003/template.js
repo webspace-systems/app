@@ -1,42 +1,11 @@
 
 class template {
 
-	static debug = true
-
 	static init ( $config = {}, $callback = null  ) {
 
-		return (
+		return window.Template instanceof this ? Template : (
 
-			window.Template = 
-
-				( window.Template instanceof template )
-				
-					?
-						window.Template
-					:
-
-						( ! this.debug )
-
-							?
-								new template( ...arguments )
-							:
-								new Proxy ( new template( ...arguments ), {
-
-									get ( target, method_name ) {
-
-										if ( typeof target[method_name] == 'function' )
-										{
-											return ( ...args ) => {
-
-												let result = target[method_name].apply( this, args )
-
-												console.log ( this.constructor.name,  method_name,  args,  result )
-
-												return result
-											}
-										}
-									}
-								})
+			window.Template = new template( ...arguments )
 		)
 	}
 
