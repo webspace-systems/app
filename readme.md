@@ -1,5 +1,4 @@
 
-# Index #
 
 
 - [__router.php__](#routerphp)
@@ -74,9 +73,6 @@ Compiled and inserted directly in the header.
 
 
 
-## public ##
-
-Thought as a creative name for the default public frontpage website.
 
 
 
