@@ -1,33 +1,35 @@
 #!/bin/bash
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+
+
+SRC=("tests")
 
 interprete_empty_response_as_success=true
 
-bold=$(tput bold)
-normal=$(tput sgr0)
+
 
 verbose=true
 
 if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
-	
 	verbose=true
 
-	printf "PHP Tests .. \n"
-
+	printf " for  \$filepath  in  '${SRC}'  \n\n"
+	printf " -name '*.php'  \n\n"
+	printf "     php  -d display_errors  -f '\$filepath'  \n\n"
 fi
 
 
-if [ "$interprete_empty_response_as_success" = true ] && [ "$verbose" = true ]
-then
-	printf "\ninterprete_empty_response_as_success = true\n"
-fi
 
-
-for filepath in $(find tests -name '*.php')
+for filepath in $(find "${SRC}" -name '*.php')
 do
     [ -e "$filepath" ] || continue
 
-	result=$(php -f "$filepath")
+
+	result=$( php  -d display_errors  -f "$filepath" )
+
 
 	if ( [[ $result == *"K: FOUND NO ERRORS"* ]] || [ "$result" = "OK" ] )
 	then

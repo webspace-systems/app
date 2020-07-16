@@ -3,20 +3,29 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+
+SRC=("src")
+
+
 verbose=true
 
 if ( [ "$1" == '-v' ] || [ "$1" == '--verbose' ] )
 then
-	
 	verbose=true
 
-	printf "PHP Syntax Check .. \n"
+	printf " for  \$filepath  in  '${SRC}'  \n\n"
+	printf " -name '*.php'  \n\n"
+	printf " -or -name '*.phtml'  \n\n"
+	printf " -not -path '*/plugins/*'  \n\n"
+	printf "     php  -d display_errors  -l  -f '\$filepath'  \n\n"
 fi
 
 
-for filepath in $( find src \( -name "*.php" -or -name "*.phtml" \) -not -path "*/plugins/*" )
+for filepath in $( find "${SRC}" \( -name '*.php' -or -name '*.phtml' \) -not -path '*/plugins/*' )
 do
-	result=$(php -l "$filepath")
+
+	result=$(  php  -l  -d display_errors  -f "$filepath"  )
+
 
 	if [[ $result == *"No syntax errors"* ]]
 	then

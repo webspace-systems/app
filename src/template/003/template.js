@@ -1,48 +1,84 @@
 
 class template {
 
-	static init () {
+	static init ( ) {
 
 		if (  typeof window.Template == 'undefined'  ||  ! ( Template instanceof template )  )
 		{
-			window.Template = new template( ...arguments )
+			window.Template = new template( ...arguments ),
 		}
 
 		return window.Template
 	}
 
-	constructor ( config = {}, module = null ) {
+	constructor ( config = {} ) {
 
-		if ( typeof this.initialized == 'boolean' && this.initialized == true )
-		{
-			console.error("Constructor called again after init")
-			
-			return this
-		}
+		if ( typeof this.initialized != 'undefined' ) return console.error('template already constructed')
 
 		this.initialized = true
 
-		this.config = {
-			html_attr_val_double_quotes_may_fallback_to: '”',
-			html_tags_valid: ['a','abbr','address','area','article','aside','audio','b','base','bdi','bdo','blockquote','body','br','button','canvas','caption','cite','code','col','colgroup','data','datalist','dd','del','details','dfn','dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form','h1','h2','h3','h4','h5','h6','head','header','hgroup','hr','html','i','iframe','img','input','ins','kbd','label','legend','li','link','main','map','mark','menu','meta','meter','nav','noscript','object','ol','optgroup','option','output','p','param','picture','pre','progress','q','rp','rt','ruby','s','samp','script','section','select','slot','small','source','span','strong','style','sub','summary','sup','table','tbody','td','template','textarea','tfoot','th','thead','time','title','tr','track','u','ul','var','video','wbr'],
+		this.config = 
+		{
+			html_attr_val_double_quotes_may_fallback_to: "”",
+
+			debug: false,
+
 			...config
 		}
 
-		if ( module )
+		this.html_tags_valid = [
+			'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo',
+			'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup',
+			'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed',
+			'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+			'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label',
+			'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'meta', 'meter', 'nav', 'noscript',
+			'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 'progress',
+			'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'slot', 'small', 'source',
+			'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template',
+			'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
+		]
+
+
+		if ( this.config.debug )
 		{
-			this.load_module ( module )
+			new Proxy ( this, {
+
+				get ( target, method_name, receiver ) {
+
+					const method = target[method_name]
+
+					return function ( ...args ) {
+
+						let result = method.apply( this, args )
+
+						console.log ( this.constructor.name,  method_name,  args,  { RESULT: result }, {'DB_receiver',receiver} )
+
+						return result
+					}
+				}
+			})
 		}
+
 	}
 
-	load_module ( module ) {
+
+	load_module (  module, parameters ) {
+
+		console.log( 'load_module', { module, parameters } )
+		return
 
 		if ( typeof module.contents == 'object' )
 		{
 			module.contents = this.template_render ( module.contents )
 		}
 
+
 		console.log( 'module', module )
 	}
+
+
+
 
 
 	template_render ( doc, depth = 0, path = [], ret_array = false ) {
@@ -89,7 +125,7 @@ class template {
 
 			if ( elem.length == 0  || typeof elem[0] != 'string' )
 			{
-				console.log("Invalid doc elem Missing tag name at index/key 0 in given elem: ", elem, {doc});
+				console.log("Invalid doc elem Missing tag name at index/key 0 in given elem: ", elem, {doc})
 				continue
 			}
 
@@ -104,7 +140,7 @@ class template {
 
 			var e_str_contents = elem.filter((k,v)=> typeof v == 'string' )
 
-			if( e_str_contents.length === elem.length && this.config.html_tags_valid.indexOf( elem[0] ) < 0 )
+			if( e_str_contents.length === elem.length && this.html_tags_valid.indexOf( elem[0] ) < 0 )
 			{
 				for ( var ck in e_str_contents )
 				{
