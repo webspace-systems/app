@@ -83,14 +83,14 @@ trait _template_003 {
 	}
 
 
-	function template ( array $content, array $require_files = [] ) : string {
+	function template ( array $content, array $require_files = [] ) : void {
 
 		$config = $this->template_config();
 
 		if( $this->requested('template_component') )
 		{
 
-			return $content;
+			echo $content;
 		
 		}
 		else
@@ -144,7 +144,7 @@ trait _template_003 {
 				]]
 			];
 
-			return $this->template_render($doc);
+			echo $this->template_render($doc);
 		}
 	}
 
@@ -258,7 +258,7 @@ trait _template_003 {
 	}
 	*/
 	
-	function template_render ( array $doc, int $depth = 0, array $path = [] ) {
+	function template_render ( array $doc, int $depth = 0, array $path = [], $ret_array = false ) {
 
 
 		$config = $this->template_config();
@@ -493,8 +493,8 @@ trait _template_003 {
 						$html[] = $padding . "</$e_name>";
 
 
-					else
-					if (
+					elseif
+					(
 						  isset ( $content[0] )
 						&&
 						  is_string ( $content[0] )
@@ -531,7 +531,7 @@ trait _template_003 {
 
 
 
-		return $html;
+		return  $ret_array ? $html : implode ( "\n", $html );
 	}
 
 

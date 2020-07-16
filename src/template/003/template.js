@@ -1,11 +1,36 @@
 
 class template {
 
+	static debug = true
+
 	static init ( ) {
 
 		if (  typeof window.Template == 'undefined'  ||  ! ( Template instanceof template )  )
 		{
-			window.Template = new template( ...arguments ),
+			if ( this.debug )
+
+				window.Template = new Proxy (
+
+					new template( ...arguments ),
+
+					{
+						get ( target, method_name ) {
+						
+							return ( ...args ) => {
+
+								let result = target[method_name].apply( this, args )
+
+								console.log ( this.constructor.name,  method_name,  args,  result )
+
+								return result
+							}
+						}
+					}
+				)
+
+			else
+
+				window.Template = new template( ...arguments )
 		}
 
 		return window.Template
@@ -21,7 +46,7 @@ class template {
 		{
 			html_attr_val_double_quotes_may_fallback_to: "”",
 
-			debug: false,
+			debug: true,
 
 			...config
 		}
@@ -39,31 +64,12 @@ class template {
 			'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 		]
 
-
-		if ( this.config.debug )
-		{
-			new Proxy ( this, {
-
-				get ( target, method_name, receiver ) {
-
-					const method = target[method_name]
-
-					return function ( ...args ) {
-
-						let result = method.apply( this, args )
-
-						console.log ( this.constructor.name,  method_name,  args,  { RESULT: result }, {'DB_receiver',receiver} )
-
-						return result
-					}
-				}
-			})
-		}
-
 	}
 
 
 	load_module (  module, parameters ) {
+
+		return true
 
 		console.log( 'load_module', { module, parameters } )
 		return
