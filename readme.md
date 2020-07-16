@@ -4,11 +4,11 @@
 
 
 
-- [__router.php__](#routerphp)
+- [__router.php__](#routerphp) [*(src/router.php)*](src/router.php)
 
-- [__config.php__](#configphp)
+- [__config.php__](#configphp) [*(src/config.php)*](src/config.php)
 
-- [__app.php__](#appphp)
+- [__app.php__](#appphp) [*(src/app.php)*](src/app.php)
 
 - [__template__](#template)
 
