@@ -128,24 +128,35 @@ Simple user system incl. trait function 'user' & 'user_require'.
 
 
 
+
+
 # sh #
 
-Scripts for misc. automatization of special tasks like testing & compiling
-Fx. maybe we can also make JS unit tests using Babel...?!
-`node ./node_modules/babel-cli/bin/babel-node.js tests/error/trait.js`
+
+Bash scripts to:
 
 
-- [__sh/lint__](#sh_lint)
-- [__sh/test__](#sh_test)
-- [__sh/test_php_tests__](#sh_test_php_tests)
-- [__sh/test_php_syntax__](#sh_test_php_syntax)
+- __Validate syntax__
 
+- - [__sh/test_syntax__](#sh_test_php_syntax)
+
+
+- __Enforce code style__
+
+- - [__sh/lint__](#sh_lint)
+
+- - [__sh/format__](#sh_format)
+
+
+- __Unit test__
+
+- - [__sh/test_php_tests__](#sh_test_php_tests)
+
+- - [__sh/test_js_tests__](#sh_test_js_tests)
 
 
 
 If you get fx __`-bash: sh/build: Permission denied`__  just  `$  chmod 777 sh/build `
-
-
 
 
 
@@ -214,11 +225,20 @@ See [sh/test_php_tests.sh](sh/test_php_syntax.sh)
 
 
 
+## sh/test_js_syntax ##
+
+[...]
+
+
+## sh/test_js_tests ##
+
+[`$  node ./node_modules/babel-cli/bin/babel-node.js tests/error/trait.js `]
 
 
 
 
-# sh/build #
+
+## sh/build ##
 
   
   `$  sh/build `
@@ -239,11 +259,22 @@ babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
 
 
 
+
+
+
+
+
+
+
 # Notes #
 
 - pluralisation rules
 
-- `const findComponentByPath = (path, routes) => routes.find(r => r.path.match(new RegExp(`^\\${path}$`, 'gm'))) || undefined;`
+- ```js  const findComponentByPath = (path, routes) => routes.find(r => r.path.match(new RegExp(`^\\${path}$`, 'gm'))) || undefined;```
+
+- Consider by comparing __*jshint*__ vs *eslint*
+
+
 
 
 
@@ -275,9 +306,11 @@ print((new kanban())->connect_trello()); // "Fancy shit"
 ```
 
 *
-Traits are a mechanism for code reuse in single inheritance languages such as PHP. A Trait is intended to reduce some limitations of single inheritance by enabling a developer to reuse sets of methods freely in several independent classes living in different class hierarchies. The semantics of the combination of Traits and classes is defined in a way which reduces complexity, and avoids the typical problems associated with multiple inheritance and Mixins.
+	Traits are a mechanism for code reuse in single inheritance languages such as PHP. A Trait is intended to reduce some limitations of single inheritance by enabling a developer to reuse sets of methods freely in several independent classes living in different class hierarchies. The semantics of the combination of Traits and classes is defined in a way which reduces complexity, and avoids the typical problems associated with multiple inheritance and Mixins.
 
-A Trait is similar to a class, but only intended to group functionality in a fine-grained and consistent way. It is not possible to instantiate a Trait on its own. It is an addition to traditional inheritance and enables horizontal composition of behavior; that is, the application of class members without requiring inheritance.
-*
-[See php.net/manual/en/language.oop5.traits.php](https://www.php.net/manual/en/language.oop5.traits.php)
+	A Trait is similar to a class, but only intended to group functionality in a fine-grained and consistent way. It is not possible to instantiate a Trait on its own. It is an addition to traditional inheritance and enables horizontal composition of behavior; that is, the application of class members without requiring inheritance.
+
+* [php.net/manual/en/language.oop5.traits.php](https://www.php.net/manual/en/language.oop5.traits.php)
+
+
 
