@@ -4,11 +4,11 @@
 
 
 
-- [__router.php__](#routerphp) [*(src/router.php)*](src/router.php)
+- [__router.php__](#routerphp)
 
-- [__config.php__](#configphp) [*(src/config.php)*](src/config.php)
+- [__config.php__](#configphp)
 
-- [__app.php__](#appphp) [*(src/app.php)*](src/app.php)
+- [__app.php__](#appphp)
 
 - [__template__](#template)
 
@@ -22,7 +22,7 @@
 
 - [__user/trait.php__](#usertraitphp)
 
-- [__sh__](#sh) Bash scripts
+- [__sh__](#sh)
 
 - [__sh/test__](#scriptstestsh)
 
@@ -50,6 +50,11 @@
 
 
 
+#  config.php  #
+
+[...]
+
+
 
 
 
@@ -65,17 +70,17 @@ Implemented by [index.php](src/index.php)
  - A component can also supply php traits like sql and error handling, or js like functions for ajax communication.
 
 
-##  config.php  ##
+
+#  template  #
+
 
 [...]
 
 
-##  template  ##
-
-Template front-end [...]
 
 
-##  plugins/asset_load_controller  ##
+
+#  plugins/asset_load_controller  #
 
 JS feature to ensuring complete loading of all css and js assets,
 Compiled and inserted directly in the header.
@@ -88,10 +93,7 @@ Compiled and inserted directly in the header.
 
 
 
-
 #  error/trait.php  #
-
-[Probably outdated]
 
 function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = false, $code = 500 )
 - just proxy for static \_error:
@@ -111,15 +113,16 @@ function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = fa
 
 #  error/error.js  #
 
-front-end error handling
 
+[...]
 
 
 
 
 #  sql/trait.php  #
 
-always returning sql instance
+
+[...]
 
 
 
@@ -127,8 +130,8 @@ always returning sql instance
 
 #  user/trait.php  #
 
-Simple user system incl. trait function 'user' & 'user_require'.
 
+Simple user system incl. trait function 'user' & 'user_require'.
 
 
 
@@ -144,7 +147,7 @@ Bash scripts to:
 
 - __Validate syntax__
 
-- - [__sh/test_syntax__](#sh_test_php_syntax)
+- - [__sh/test_php_syntax__](#sh_test_php_syntax)
 
 
 - __Enforce code style__
@@ -161,8 +164,6 @@ Bash scripts to:
 - - [__sh/test_js_tests__](#sh_test_js_tests)
 
 
-
-If you get fx __`-bash: sh/build: Permission denied`__  just  $ `chmod 777 sh/build`
 
 
 
@@ -244,6 +245,9 @@ See [sh/test_php_tests.sh](sh/test_php_syntax.sh)
 
 
 
+
+
+
 ##  sh/build  ##
 
   
@@ -257,7 +261,8 @@ babel src -d dist -D -x [.js] --no-comments --ignore [plugins/*] --verbose
 ```
 
 
- - ¿ Also test.. ?
+
+
 
 
 
