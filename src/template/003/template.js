@@ -3,44 +3,50 @@ class template {
 
 	static debug = true
 
-	static init ( ) {
+	static init ( $config = {}, $callback = null  ) {
 
-		if (  typeof window.Template == 'undefined'  ||  ! ( Template instanceof template )  )
-		{
-			if ( this.debug )
+		return (
 
-				window.Template = new Proxy (
+			window.Template = 
 
-					new template( ...arguments ),
+				( window.Template instanceof template )
+				
+					?
+						window.Template
+					:
 
-					{
-						get ( target, method_name ) {
-						
-							return ( ...args ) => {
+						( ! this.debug )
 
-								let result = target[method_name].apply( this, args )
+							?
+								new template( ...arguments )
+							:
+								new Proxy ( new template( ...arguments ), {
 
-								console.log ( this.constructor.name,  method_name,  args,  result )
+									get ( target, method_name ) {
 
-								return result
-							}
-						}
-					}
-				)
+										if ( typeof target[method_name] == 'function' )
+										{
+											return ( ...args ) => {
 
-			else
+												let result = target[method_name].apply( this, args )
 
-				window.Template = new template( ...arguments )
-		}
+												console.log ( this.constructor.name,  method_name,  args,  result )
 
-		return window.Template
+												return result
+											}
+										}
+									}
+								})
+		)
 	}
 
-	constructor ( config = {} ) {
+	constructor (  config = {},  $callback = null  ) {
 
 		if ( typeof this.initialized != 'undefined' ) return console.error('template already constructed')
 
 		this.initialized = true
+
+		console.log('new', arguments)
 
 		this.config = 
 		{
@@ -67,16 +73,19 @@ class template {
 	}
 
 
-	load_module (  module, parameters ) {
 
-		return true
 
-		console.log( 'load_module', { module, parameters } )
-		return
+	load (  path,  parameters = {}  ) {
+
+		console.log('load', arguments)
+
+
+		if ( typeof path != 'string' ) throw "Invalid argument 'path'. ...arguments: " + JSON.stringify({...arguments});
+
 
 		if ( typeof module.contents == 'object' )
 		{
-			module.contents = this.template_render ( module.contents )
+			module.contents = this.render ( module.contents )
 		}
 
 
@@ -87,7 +96,8 @@ class template {
 
 
 
-	template_render ( doc, depth = 0, path = [], ret_array = false ) {
+
+	render ( doc, depth = 0, path = [], ret_array = false ) {
 
 		if ( typeof doc[0] == 'string' )
 		{
@@ -218,7 +228,7 @@ class template {
 			{
 				if( Object.keys(e_contents).length > 0 )
 				{
-					content = this.template_render ( e_contents,  depth + 1,  e_path,  true )
+					content = this.render ( e_contents,  depth + 1,  e_path,  true )
 
 					if ( Object.keys( content ).length > 0 )
 					{
