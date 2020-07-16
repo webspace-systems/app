@@ -4,15 +4,13 @@
 
 - [__router.php__](#routerphp)
 
+- [__config.php__](#configphp)
+
 - [__app.php__](#appphp)
 
-- - [__config.php__](#configphp)
+- [__template__](#template)
 
-- - [__template__](#template)
-
-- - [__plugins/asset_load_controller__](#pluginsasset_load_controller)
-
-- - [__public__](#public)
+- [__plugins/asset_load_controller__](#pluginsasset_load_controller)
 
 - [__error/trait.php__](#errortraitphp)
 
@@ -84,6 +82,7 @@ Thought as a creative name for the default public frontpage website.
 
 
 
+
 # error/trait.php #
 
 [Probably outdated]
@@ -103,6 +102,7 @@ function __error__ ( $msg = "", $add_data = [], $die = true, $is_user_fault = fa
 - to handle fatal errors, make sure the error/trait.php is required and `register_on_shutdown(['_error','_on_shutdown']);`
 
 
+
 # error/error.js #
 
 front-end error handling
@@ -116,9 +116,13 @@ front-end error handling
 always returning sql instance
 
 
+
+
+
 # user/trait.php #
 
 Simple user system incl. trait function 'user' & 'user_require'.
+
 
 
 
@@ -143,22 +147,53 @@ If you get: `-bash: sh/build: Permission denied`, just $`chmod 777 sh/build`
 
 
 
+
+
 ## sh/lint ##
 
-$`sh/lint`
+
+	$ `sh/lint`
+
+
+to
+
+ 1. [sh/lint_js](sh/lint_js)
+
+ 2. [sh/lint_php](sh/lint_php)
+
+
+
+### sh/lint_js ###
+
+[...]
+
+
+
+### sh/lint_php ###
+
+[...]
+
+
+
+
 
 
 
 ## sh/test ##
 
-$`sh/test`
+
+	$ `sh/test`
+
 
 to
 
-1. [sh/tests/php_tests.sh](sh/tests/php_tests.sh)
-2. [sh/tests/php_syntax.sh](sh/tests/php_syntax.sh)
+ 1. [sh/tests/php_tests.sh](sh/tests/php_tests.sh)
 
-![\[image\]](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAAUCAAAAAAVAxSkAAABrUlEQVQ4y+3TPUvDQBgH8OdDOGa+oUMgk2MpdHIIgpSUiqC0OKirgxYX8QVFRQRpBRF8KShqLbgIYkUEteCgFVuqUEVxEIkvJFhae3m8S2KbSkcFBw9yHP88+eXucgH8kQZ/jSm4VDaIy9RKCpKac9NKgU4uEJNwhHhK3qvPBVO8rxRWmFXPF+NSM1KVMbwriAMwhDgVcrxeMZm85GR0PhvGJAAmyozJsbsxgNEir4iEjIK0SYqGd8sOR3rJAGN2BCEkOxhxMhpd8Mk0CXtZacxi1hr20mI/rzgnxayoidevcGuHXTC/q6QuYSMt1jC+gBIiMg12v2vb5NlklChiWnhmFZpwvxDGzuUzV8kOg+N8UUvNBp64vy9q3UN7gDXhwWLY2nMC3zRDibfsY7wjEkY79CdMZhrxSqqzxf4ZRPXwzWJirMicDa5KwiPeARygHXKNMQHEy3rMopDR20XNZGbJzUtrwDC/KshlLDWyqdmhxZzCsdYmf2fWZPoxCEDyfIvdtNQH0PRkH6Q51g8rFO3Qzxh2LbItcDCOpmuOsV7ntNaERe3v/lP/zO8yn4N+yNPrekmPAAAAAElFTkSuQmCC)
+ 2. [sh/tests/php_syntax.sh](sh/tests/php_syntax.sh)
+
+
+![image](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAAUCAAAAAAVAxSkAAABrUlEQVQ4y+3TPUvDQBgH8OdDOGa+oUMgk2MpdHIIgpSUiqC0OKirgxYX8QVFRQRpBRF8KShqLbgIYkUEteCgFVuqUEVxEIkvJFhae3m8S2KbSkcFBw9yHP88+eXucgH8kQZ/jSm4VDaIy9RKCpKac9NKgU4uEJNwhHhK3qvPBVO8rxRWmFXPF+NSM1KVMbwriAMwhDgVcrxeMZm85GR0PhvGJAAmyozJsbsxgNEir4iEjIK0SYqGd8sOR3rJAGN2BCEkOxhxMhpd8Mk0CXtZacxi1hr20mI/rzgnxayoidevcGuHXTC/q6QuYSMt1jC+gBIiMg12v2vb5NlklChiWnhmFZpwvxDGzuUzV8kOg+N8UUvNBp64vy9q3UN7gDXhwWLY2nMC3zRDibfsY7wjEkY79CdMZhrxSqqzxf4ZRPXwzWJirMicDa5KwiPeARygHXKNMQHEy3rMopDR20XNZGbJzUtrwDC/KshlLDWyqdmhxZzCsdYmf2fWZPoxCEDyfIvdtNQH0PRkH6Q51g8rFO3Qzxh2LbItcDCOpmuOsV7ntNaERe3v/lP/zO8yn4N+yNPrekmPAAAAAElFTkSuQmCC)
+
 
 
 ## sh/test_php_tests.sh ##
