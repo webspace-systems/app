@@ -1,0 +1,55 @@
+#!/bin/bash
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+
+TOKEN_SUCCESS="OK_ALL_GOOD"
+
+TOKEN_SUCCESS_NO_CHANGE="OK_ALL_GOOD_NO_CHANGE"
+
+
+aux_php_doc=("aux_php_scripts/doc_readme_md.php")
+
+if ! ( test -f "$aux_php_doc" )
+then
+	aux_php_doc="sh/$aux_php_doc"
+fi
+
+
+
+result=$(php -f "$aux_php_doc" e)
+
+
+if ( [[ "$result" == *"$TOKEN_SUCCESS_NO_CHANGE"* ]] )
+then
+
+        printf "\n\e[34m UPD ${normal} $aux_php_doc"
+else
+
+	if ( [[ "$result" == *"$TOKEN_SUCCESS"* ]] )
+	then
+
+            printf "\n\e[32m OK  ${normal} $aux_php_doc"
+
+   else
+
+    	if [ -z "$result" ] # is empty
+    	then
+
+    		printf "\n\e[31m ERR ${normal} $aux_php_doc: \e[31m Empty response ${normal}"
+			printf "\n\n\n"
+			exit 1
+
+		else
+
+    		printf "\n\e[31m ERR ${normal} $aux_php_doc: \e[31m ${result} ${normal}"
+    		printf "\n\n\n"
+    		exit 1
+    	fi
+   
+   fi
+
+fi
+
+
+printf "\n\n\n\e[32mAll tasks completed. ${normal} \n\n\n"

@@ -16,11 +16,11 @@
 
 - [__error/trait.php__](#errortraitphp)
 
-- [__error/error.js__](#errorerrorjs): front-end error handling
+- [__error/error.js__](#errorerrorjs)
 
-- [__sql/trait.php__](#sqltraitphp): 'sql' and wrapper funct.
+- [__sql/trait.php__](#sqltraitphp)
 
-- [__user/trait.php__](#usertraitphp): login funct. with method 'user']
+- [__user/trait.php__](#usertraitphp)
 
 - [__sh__](#sh) Bash scripts
 

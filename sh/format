@@ -6,7 +6,7 @@ normal=$(tput sgr0)
 
 exec_scripts=(
 
-	"aux_php_scripts/format_package.json.php"
+	"aux_php_scripts/format_package_json.php"
 
 	"aux_php_scripts/format_src.php"
 
@@ -14,9 +14,9 @@ exec_scripts=(
 )
 
 
-SUCCESS_TOKEN="OK_ALL_GOOD"
+TOKEN_SUCCESS="OK_ALL_GOOD"
 
-ALT_SUCCESS_TOKEN="OK: FOUND NO ERRORS"
+ALT_TOKEN_SUCCESS="OK: FOUND NO ERRORS"
 
 
 conf_exec=false
@@ -63,7 +63,7 @@ c=0; for script_file_path in "${exec_scripts[@]}"; do
 	fi
 
 
-	if ( [[ "$result" == *"$SUCCESS_TOKEN"* ]] || [[ "$result" == *"$ALT_SUCCESS_TOKEN"* ]] )
+	if ( [[ "$result" == *"$TOKEN_SUCCESS"* ]] || [[ "$result" == *"$ALT_TOKEN_SUCCESS"* ]] )
 	then
 
 	    	printf "\n\e[32m OK  ${normal} $script_file_path"

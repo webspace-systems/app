@@ -2,7 +2,7 @@
 
 $SRC_DIR = substr(__DIR__,0,strpos(__DIR__,'/sh/')) . '/src';
 
-$SUCCESS_TOKEN = 'OK_ALL_GOOD';
+$TOKEN_SUCCESS = 'OK_ALL_GOOD';
 
 $EXEC_FORMAT_FIX = ( in_array( 'e', $argv ) || $_REQUEST['e'] ) ? true : false;
 
@@ -238,7 +238,7 @@ $result =
 
 if ( empty ( $result['formatting_proposition'] ) )
 
-	echo $SUCCESS_TOKEN;
+	echo $TOKEN_SUCCESS;
 
 else
 
